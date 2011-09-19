@@ -1,5 +1,19 @@
 # Make It Rain (Android)
 
+Let me say this up front: This app is entirely built to generate income for me.
+There is no clear business case for this app, it serves no particular purpose
+other than entertainment, and it monetizes a completely unnecessary activity.
+
+With that being said, I had a lot of fun building this app, and I think it's a
+pretty cool idea, even though I've never been to a nightclub or thrown any
+large amount of money in the air.
+
+I'm a fan of open source software, so you'll see that this app is completely
+free and open source, and that I've provided signed builds that are completely
+ad-free for those diligent enough to find this project.
+
+Cheers.
+
 ## Disclaimer
 
 The Make It Rain Android App is in no way associated with the recording artist
