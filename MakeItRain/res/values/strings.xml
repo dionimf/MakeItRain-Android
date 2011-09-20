@@ -20,4 +20,7 @@ Special thanks for the idea to Eric Overton and Jeremy Davis."</string>
 	<string name="orientation_right">Right</string>
 	<string name="about_make_it_rain">About Make It Rain</string>
 	<string name="cool_thanks">Cool, thanks!</string>
+	<string name="pref_total_spent">totalSpent</string>
+	<string name="prefs_orientation">orientation</string>
+	<string name="prefs_denomination">denomination</string>
 </resources>

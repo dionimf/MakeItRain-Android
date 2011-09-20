@@ -36,6 +36,7 @@ public class BillView extends SurfaceView implements SurfaceHolder.Callback {
 
         private SurfaceHolder mSurfaceHolder;
         private Context mContext;
+        private Resources mResources;
         private SharedPreferences mPrefs;
 
         private Bitmap mBillImage;
@@ -47,17 +48,19 @@ public class BillView extends SurfaceView implements SurfaceHolder.Callback {
         private int mBillHeight;
         private int mFlingVelocity;
 
+        private int mImageResource;
+        private int mDenomination;
         private int mTotalSpent;
 
-        public BillThread(SurfaceHolder surfaceHolder, Context context, Handler handler) {
+        public BillThread(SurfaceHolder surfaceHolder, Context context, Handler handler, int imageResource, int denomination) {
             mSurfaceHolder = surfaceHolder;
             mContext = context;
 
             mPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-            mTotalSpent = mPrefs.getInt("totalSpent", 0);
+            mTotalSpent = mPrefs.getInt(context.getString(R.string.pref_total_spent), 0);
 
-            Resources res = context.getResources();
-            mBillImage = BitmapFactory.decodeResource(res, R.drawable.bill_100_right);
+            mResources = context.getResources();
+            mBillImage = BitmapFactory.decodeResource(mResources, getImageResource());
             mBillHeight = mBillImage.getHeight();
         }
 
@@ -77,16 +80,33 @@ public class BillView extends SurfaceView implements SurfaceHolder.Callback {
             mFlinging = isFlinging;
         }
 
+        public int getDenomination() {
+            return mDenomination;
+        }
+
+        public void setDenomination(int denomination) {
+            mDenomination = denomination;
+        }
+
+        public int getImageResource() {
+            return mImageResource;
+        }
+
+        public void setImageResource(int imageResource) {
+            mImageResource = imageResource;
+            mBillImage = BitmapFactory.decodeResource(mResources, mImageResource);
+        }
+
         private void drawOn(Canvas canvas) {
             if (isFlinging() && mBillY > -mBillHeight) {
                 mBillY -= mFlingVelocity;
             } else if (isFlinging()) {
                 mBillY = 0;
                 setIsFlinging(false);
-                mTotalSpent += 1;
+                mTotalSpent += getDenomination();
 
                 Editor editor = mPrefs.edit();
-                editor.putInt("totalSpent", mTotalSpent);
+                editor.putInt(mContext.getString(R.string.pref_total_spent), mTotalSpent);
                 editor.commit();
             }
             canvas.drawBitmap(mBillImage, 0, 0, null);
@@ -131,7 +151,9 @@ public class BillView extends SurfaceView implements SurfaceHolder.Callback {
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
 
-        thread = new BillThread(holder, context, null);
+        thread = new BillThread(holder, context, null, getImageResource(), getDenomination());
+        thread.setDenomination(1);
+        thread.setImageResource(R.drawable.bill_1_left);
 
         setFocusable(true);
     }
@@ -167,6 +189,22 @@ public class BillView extends SurfaceView implements SurfaceHolder.Callback {
         }
 
         return false;
+    }
+    
+    public int getDenomination() {
+        return thread.getDenomination();
+    }
+    
+    public void setDenomination(int denomination) {
+        thread.setDenomination(denomination);
+    }
+    
+    public int getImageResource() {
+        return thread.getImageResource();
+    }
+    
+    public void setImageResource(int imageResource) {
+        thread.setImageResource(imageResource);
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {

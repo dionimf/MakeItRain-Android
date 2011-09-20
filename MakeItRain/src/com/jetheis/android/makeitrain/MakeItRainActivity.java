@@ -16,12 +16,19 @@
 
 package com.jetheis.android.makeitrain;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,7 +48,16 @@ public class MakeItRainActivity extends Activity {
     private static final int DIALOG_VIP = 4;
 
     private AdView mAdView;
+    private BillView mBillView;
     private Resources mResources;
+    private SharedPreferences mPrefs;
+
+    private Map<String, Integer> mLeftMap;
+    private Map<String, Integer> mRightMap;
+    private Map<String, Integer> mDenominationValues;
+
+    private String mOrientation;
+    private String mDenomination;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,14 +66,58 @@ public class MakeItRainActivity extends Activity {
 
         mResources = getResources();
 
+        mLeftMap = new HashMap<String, Integer>();
+        mLeftMap.put(mResources.getString(R.string.denomination_1), R.drawable.bill_1_left);
+        mLeftMap.put(mResources.getString(R.string.denomination_5), R.drawable.bill_5_left);
+        mLeftMap.put(mResources.getString(R.string.denomination_10), R.drawable.bill_10_left);
+        mLeftMap.put(mResources.getString(R.string.denomination_20), R.drawable.bill_20_left);
+        mLeftMap.put(mResources.getString(R.string.denomination_50_vip), R.drawable.bill_50_left);
+        mLeftMap.put(mResources.getString(R.string.denomination_100_vip), R.drawable.bill_100_left);
+
+        mRightMap = new HashMap<String, Integer>();
+        mRightMap.put(mResources.getString(R.string.denomination_1), R.drawable.bill_1_right);
+        mRightMap.put(mResources.getString(R.string.denomination_5), R.drawable.bill_5_right);
+        mRightMap.put(mResources.getString(R.string.denomination_10), R.drawable.bill_10_right);
+        mRightMap.put(mResources.getString(R.string.denomination_20), R.drawable.bill_20_right);
+        mRightMap.put(mResources.getString(R.string.denomination_50_vip), R.drawable.bill_50_right);
+        mRightMap.put(mResources.getString(R.string.denomination_100_vip), R.drawable.bill_100_right);
+        
+        mDenominationValues = new HashMap<String, Integer>();
+        mDenominationValues.put(mResources.getString(R.string.denomination_1), 1);
+        mDenominationValues.put(mResources.getString(R.string.denomination_5), 5);
+        mDenominationValues.put(mResources.getString(R.string.denomination_10), 10);
+        mDenominationValues.put(mResources.getString(R.string.denomination_20), 20);
+        mDenominationValues.put(mResources.getString(R.string.denomination_50_vip), 50);
+        mDenominationValues.put(mResources.getString(R.string.denomination_100_vip), 100);
+
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        mOrientation = mPrefs.getString(getString(R.string.prefs_orientation), mResources.getString(R.string.orientation_left));
+        mDenomination = mPrefs.getString(getString(R.string.prefs_denomination), mResources.getString(R.string.denomination_1));
+
         mAdView = (AdView) findViewById(R.id.adView);
+        mBillView = (BillView) findViewById(R.id.bills);
 
         AdRequest request = new AdRequest();
 
         request.addTestDevice(AdRequest.TEST_EMULATOR);
-        request.addTestDevice("D7C5C55307D200C174CDFD03D70E281C"); // Aria
-
+        request.addTestDevice("D7C5C55307D200C174CDFD03D70E281C"); // Jimmy's
+                                                                   // HTC Aria
         mAdView.loadAd(request);
+    }
+    
+    public void reloadBillAndSave() {
+        if (mOrientation.equals(mResources.getString(R.string.orientation_left))) {
+            mBillView.setImageResource(mLeftMap.get(mDenomination));
+        } else {
+            mBillView.setImageResource(mRightMap.get(mDenomination));
+        }
+        
+        mBillView.setDenomination(mDenominationValues.get(mDenomination));
+        
+        Editor editor = mPrefs.edit();
+        editor.putString(getString(R.string.prefs_orientation), mOrientation);
+        editor.putString(getString(R.string.prefs_denomination), mDenomination);
+        editor.commit();
     }
 
     @Override
@@ -104,6 +164,7 @@ public class MakeItRainActivity extends Activity {
                 builder.setPositiveButton(R.string.cool_thanks, null);
                 dialog = builder.create();
                 break;
+
             case DIALOG_DENOMINATION:
                 final CharSequence[] items = { mResources.getString(R.string.denomination_1),
                         mResources.getString(R.string.denomination_5), mResources.getString(R.string.denomination_10),
@@ -111,32 +172,44 @@ public class MakeItRainActivity extends Activity {
                         mResources.getString(R.string.denomination_50_vip),
                         mResources.getString(R.string.denomination_100_vip) };
 
+                int currentIndex = Arrays.asList(items).indexOf(mDenomination);
+
                 AlertDialog.Builder denominationBuilder = new AlertDialog.Builder(this);
                 denominationBuilder.setTitle(R.string.choose_a_denomination);
-                denominationBuilder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
+                denominationBuilder.setSingleChoiceItems(items, currentIndex, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
                         dialog.dismiss();
                         if (items[item].equals(R.string.denomination_50_vip)
                                 || items[item].equals(R.string.denomination_100_vip)) {
                             showDialog(DIALOG_VIP);
+                        } else {
+                            mDenomination = items[item].toString();
+                            reloadBillAndSave();
                         }
                     }
                 });
                 dialog = denominationBuilder.create();
                 break;
+
             case DIALOG_ORIENTATION:
                 final CharSequence[] orientations = { mResources.getString(R.string.orientation_left),
                         mResources.getString(R.string.orientation_right) };
 
+                int currentOrientation = Arrays.asList(orientations).indexOf(mOrientation);
+
                 AlertDialog.Builder orientationBuilder = new AlertDialog.Builder(this);
                 orientationBuilder.setTitle(R.string.choose_an_orientation);
-                orientationBuilder.setSingleChoiceItems(orientations, -1, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int item) {
-                        dialog.dismiss();
-                    }
-                });
+                orientationBuilder.setSingleChoiceItems(orientations, currentOrientation,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int item) {
+                                mOrientation = orientations[item].toString();
+                                reloadBillAndSave();
+                                dialog.dismiss();
+                            }
+                        });
                 dialog = orientationBuilder.create();
                 break;
+
             default:
                 dialog = null;
         }
