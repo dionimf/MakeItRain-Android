@@ -156,7 +156,7 @@ public class BillView extends SurfaceView implements SurfaceHolder.Callback {
             case MotionEvent.ACTION_MOVE:
                 if (mDragging) {
                     int newY = (int) event.getY() - mDragYOffset;
-                    mVelocity = Math.min(Math.max(mLastMoveY - newY, 30), 100);
+                    mVelocity = Math.min(Math.max(mLastMoveY - newY, 80), 150);
                     mLastMoveY = newY;
                     thread.updateBillPostion(Math.min(0, newY));
                 }
