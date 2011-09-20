@@ -55,6 +55,9 @@ public class BillView extends SurfaceView implements SurfaceHolder.Callback {
         public BillThread(SurfaceHolder surfaceHolder, Context context, Handler handler, int imageResource, int denomination) {
             mSurfaceHolder = surfaceHolder;
             mContext = context;
+            
+            setImageResource(imageResource);
+            setDenomination(denomination);
 
             mPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
             mTotalSpent = mPrefs.getInt(context.getString(R.string.pref_total_spent), 0);
@@ -138,7 +141,7 @@ public class BillView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
-    private BillThread thread;
+    private BillThread mThread;
     private boolean mDragging = false;
 
     private int mDragYOffset;
@@ -151,9 +154,9 @@ public class BillView extends SurfaceView implements SurfaceHolder.Callback {
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
 
-        thread = new BillThread(holder, context, null, getImageResource(), getDenomination());
-        thread.setDenomination(1);
-        thread.setImageResource(R.drawable.bill_1_left);
+        mThread = new BillThread(holder, context, null, R.drawable.bill_1_left, R.string.denomination_1);
+        mThread.setDenomination(1);
+        mThread.setImageResource(R.drawable.bill_1_left);
 
         setFocusable(true);
     }
@@ -162,7 +165,7 @@ public class BillView extends SurfaceView implements SurfaceHolder.Callback {
     public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
 
-        if (thread.isFlinging()) {
+        if (mThread.isFlinging()) {
             return false;
         }
 
@@ -178,13 +181,13 @@ public class BillView extends SurfaceView implements SurfaceHolder.Callback {
                     int newY = (int) event.getY() - mDragYOffset;
                     mVelocity = Math.min(Math.max(mLastMoveY - newY, 80), 150);
                     mLastMoveY = newY;
-                    thread.updateBillPostion(Math.min(0, newY));
+                    mThread.updateBillPostion(Math.min(0, newY));
                 }
                 return true;
 
             case MotionEvent.ACTION_UP:
                 mDragging = false;
-                thread.initiateFling(mVelocity);
+                mThread.initiateFling(mVelocity);
                 return true;
         }
 
@@ -192,19 +195,19 @@ public class BillView extends SurfaceView implements SurfaceHolder.Callback {
     }
     
     public int getDenomination() {
-        return thread.getDenomination();
+        return mThread.getDenomination();
     }
     
     public void setDenomination(int denomination) {
-        thread.setDenomination(denomination);
+        mThread.setDenomination(denomination);
     }
     
     public int getImageResource() {
-        return thread.getImageResource();
+        return mThread.getImageResource();
     }
     
     public void setImageResource(int imageResource) {
-        thread.setImageResource(imageResource);
+        mThread.setImageResource(imageResource);
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
@@ -212,16 +215,16 @@ public class BillView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void surfaceCreated(SurfaceHolder holder) {
-        thread.setIsRunning(true);
-        thread.start();
+        mThread.setIsRunning(true);
+        mThread.start();
     }
 
     public void surfaceDestroyed(SurfaceHolder holder) {
         boolean retry = true;
-        thread.setIsRunning(false);
+        mThread.setIsRunning(false);
         while (retry) {
             try {
-                thread.join();
+                mThread.join();
                 retry = false;
             } catch (InterruptedException e) {
                 // Just eat it and try again
