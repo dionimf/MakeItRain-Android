@@ -52,10 +52,11 @@ public class BillView extends SurfaceView implements SurfaceHolder.Callback {
         private int mDenomination;
         private int mTotalSpent;
 
-        public BillThread(SurfaceHolder surfaceHolder, Context context, Handler handler, int imageResource, int denomination) {
+        public BillThread(SurfaceHolder surfaceHolder, Context context, Handler handler, int imageResource,
+                int denomination) {
             mSurfaceHolder = surfaceHolder;
             mContext = context;
-            
+
             setImageResource(imageResource);
             setDenomination(denomination);
 
@@ -194,19 +195,19 @@ public class BillView extends SurfaceView implements SurfaceHolder.Callback {
 
         return false;
     }
-    
+
     public int getDenomination() {
         return mThread.getDenomination();
     }
-    
+
     public void setDenomination(int denomination) {
         mThread.setDenomination(denomination);
     }
-    
+
     public int getImageResource() {
         return mThread.getImageResource();
     }
-    
+
     public void setImageResource(int imageResource) {
         mThread.setImageResource(imageResource);
     }
