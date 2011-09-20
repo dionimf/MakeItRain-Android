@@ -233,9 +233,9 @@ public class MakeItRainActivity extends Activity {
                 reportText.setText(mResources.getString(R.string.total_spent, spentDisplay));
                 reportBuilder = new AlertDialog.Builder(this);
                 reportBuilder.setView(reportLayout);
-                reportBuilder.setTitle("Your Spending Report");
-                reportBuilder.setPositiveButton("I'm so cool", null);
-                reportBuilder.setNegativeButton("Reset", new DialogInterface.OnClickListener() {
+                reportBuilder.setTitle(R.string.your_spending_report);
+                reportBuilder.setPositiveButton(R.string.im_so_cool, null);
+                reportBuilder.setNegativeButton(R.string.reset, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
                         dialog.dismiss();
                         Editor editor = mPrefs.edit();

@@ -24,4 +24,7 @@ Special thanks for the idea to Eric Overton and Jeremy Davis."</string>
 	<string name="prefs_orientation">orientation</string>
 	<string name="prefs_denomination">denomination</string>
 	<string name="total_spent">Total Rainfall: %s</string>
+	<string name="your_spending_report">Your Spending Report</string>
+	<string name="im_so_cool">"I'm so cool"</string>
+	<string name="reset">Reset</string>
 </resources>
