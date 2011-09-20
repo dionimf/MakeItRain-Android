@@ -16,6 +16,7 @@
 
 package com.jetheis.android.makeitrain;
 
+import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +37,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
@@ -45,7 +47,8 @@ public class MakeItRainActivity extends Activity {
     private static final int DIALOG_ABOUT = 1;
     private static final int DIALOG_DENOMINATION = 2;
     private static final int DIALOG_ORIENTATION = 3;
-    private static final int DIALOG_VIP = 4;
+    private static final int DIALOG_REPORT = 4;
+    private static final int DIALOG_VIP = 5;
 
     private AdView mAdView;
     private BillView mBillView;
@@ -81,7 +84,7 @@ public class MakeItRainActivity extends Activity {
         mRightMap.put(mResources.getString(R.string.denomination_20), R.drawable.bill_20_right);
         mRightMap.put(mResources.getString(R.string.denomination_50_vip), R.drawable.bill_50_right);
         mRightMap.put(mResources.getString(R.string.denomination_100_vip), R.drawable.bill_100_right);
-        
+
         mDenominationValues = new HashMap<String, Integer>();
         mDenominationValues.put(mResources.getString(R.string.denomination_1), 1);
         mDenominationValues.put(mResources.getString(R.string.denomination_5), 5);
@@ -91,11 +94,14 @@ public class MakeItRainActivity extends Activity {
         mDenominationValues.put(mResources.getString(R.string.denomination_100_vip), 100);
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        mOrientation = mPrefs.getString(getString(R.string.prefs_orientation), mResources.getString(R.string.orientation_left));
-        mDenomination = mPrefs.getString(getString(R.string.prefs_denomination), mResources.getString(R.string.denomination_1));
+        mOrientation = mPrefs.getString(getString(R.string.prefs_orientation),
+                mResources.getString(R.string.orientation_left));
+        mDenomination = mPrefs.getString(getString(R.string.prefs_denomination),
+                mResources.getString(R.string.denomination_1));
 
         mAdView = (AdView) findViewById(R.id.adView);
         mBillView = (BillView) findViewById(R.id.bills);
+        reloadBillAndSave();
 
         AdRequest request = new AdRequest();
 
@@ -104,16 +110,16 @@ public class MakeItRainActivity extends Activity {
                                                                    // HTC Aria
         mAdView.loadAd(request);
     }
-    
+
     public void reloadBillAndSave() {
         if (mOrientation.equals(mResources.getString(R.string.orientation_left))) {
             mBillView.setImageResource(mLeftMap.get(mDenomination));
         } else {
             mBillView.setImageResource(mRightMap.get(mDenomination));
         }
-        
+
         mBillView.setDenomination(mDenominationValues.get(mDenomination));
-        
+
         Editor editor = mPrefs.edit();
         editor.putString(getString(R.string.prefs_orientation), mOrientation);
         editor.putString(getString(R.string.prefs_denomination), mDenomination);
@@ -137,6 +143,7 @@ public class MakeItRainActivity extends Activity {
                 showDialog(DIALOG_ORIENTATION);
                 return true;
             case R.id.menu_report:
+                showDialog(DIALOG_REPORT);
                 return true;
             case R.id.menu_about:
                 showDialog(DIALOG_ABOUT);
@@ -210,10 +217,52 @@ public class MakeItRainActivity extends Activity {
                 dialog = orientationBuilder.create();
                 break;
 
+            case DIALOG_REPORT:
+                AlertDialog.Builder reportBuilder;
+
+                LayoutInflater reportInflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+                View reportLayout = reportInflater.inflate(R.layout.about_dialog,
+                        (ViewGroup) findViewById(R.id.about_layout));
+
+                int spent = mPrefs.getInt(mResources.getString(R.string.pref_total_spent), 0);
+
+                NumberFormat nf = NumberFormat.getCurrencyInstance();
+                String spentDisplay = nf.format(spent);
+
+                TextView reportText = (TextView) reportLayout.findViewById(R.id.about_text);
+                reportText.setText(mResources.getString(R.string.total_spent, spentDisplay));
+                reportBuilder = new AlertDialog.Builder(this);
+                reportBuilder.setView(reportLayout);
+                reportBuilder.setTitle("Your Spending Report");
+                reportBuilder.setPositiveButton("I'm so cool", null);
+                reportBuilder.setNegativeButton("Reset", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int item) {
+                        dialog.dismiss();
+                        Editor editor = mPrefs.edit();
+                        editor.putInt(mResources.getString(R.string.pref_total_spent), 0);
+                        editor.commit();
+                    }
+                });
+                dialog = reportBuilder.create();
+                break;
+
             default:
                 dialog = null;
         }
         return dialog;
+    }
+
+    @Override
+    protected void onPrepareDialog(int id, Dialog dialog) {
+        switch (id) {
+            case DIALOG_REPORT:
+                int spent = mPrefs.getInt(mResources.getString(R.string.pref_total_spent), 0);
+                NumberFormat nf = NumberFormat.getCurrencyInstance();
+                String spentDisplay = nf.format(spent);
+                ((TextView) ((AlertDialog) dialog).findViewById(R.id.about_text)).setText(mResources.getString(
+                        R.string.total_spent, spentDisplay));
+        }
+        super.onPrepareDialog(id, dialog);
     }
 
     @Override

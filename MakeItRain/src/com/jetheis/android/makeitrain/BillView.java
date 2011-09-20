@@ -106,6 +106,7 @@ public class BillView extends SurfaceView implements SurfaceHolder.Callback {
             } else if (isFlinging()) {
                 mBillY = 0;
                 setIsFlinging(false);
+                mTotalSpent = mPrefs.getInt(mResources.getString(R.string.pref_total_spent), 0);
                 mTotalSpent += getDenomination();
 
                 Editor editor = mPrefs.edit();

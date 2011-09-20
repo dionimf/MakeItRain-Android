@@ -23,4 +23,5 @@ Special thanks for the idea to Eric Overton and Jeremy Davis."</string>
 	<string name="pref_total_spent">totalSpent</string>
 	<string name="prefs_orientation">orientation</string>
 	<string name="prefs_denomination">denomination</string>
+	<string name="total_spent">Total Rainfall: %s</string>
 </resources>
