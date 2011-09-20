@@ -19,6 +19,7 @@ package com.jetheis.android.makeitrain;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,6 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
@@ -34,6 +36,9 @@ import com.google.ads.AdView;
 public class MakeItRainActivity extends Activity {
 
     private static final int DIALOG_ABOUT = 1;
+    private static final int DIALOG_DENOMINATION = 2;
+    private static final int DIALOG_ORIENTATION = 3;
+    private static final int DIALOG_VIP = 4;
 
     private AdView mAdView;
 
@@ -63,8 +68,10 @@ public class MakeItRainActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_denomination:
+                showDialog(DIALOG_DENOMINATION);
                 return true;
             case R.id.menu_orientation:
+                showDialog(DIALOG_ORIENTATION);
                 return true;
             case R.id.menu_report:
                 return true;
@@ -94,6 +101,33 @@ public class MakeItRainActivity extends Activity {
                 builder.setTitle("About Make It Rain");
                 builder.setPositiveButton("Cool, thanks!", null);
                 dialog = builder.create();
+                break;
+            case DIALOG_DENOMINATION:
+                final CharSequence[] items = {"$1", "$5", "$10", "$20", "$50 (VIPs Only)", "$100 (VIPs Only)"};
+
+                AlertDialog.Builder denominationBuilder = new AlertDialog.Builder(this);
+                denominationBuilder.setTitle("Choose a Denomination");
+                denominationBuilder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int item) {
+                        dialog.dismiss();
+                        if (items[item].equals("$50 (VIPs Only)") || items[item].equals("$100 (VIPs Only)")) {
+                            showDialog(DIALOG_VIP);
+                        }
+                    }
+                });
+                dialog = denominationBuilder.create();
+                break;
+            case DIALOG_ORIENTATION:
+                final CharSequence[] orientations = {"Left", "Right"};
+
+                AlertDialog.Builder orientationBuilder = new AlertDialog.Builder(this);
+                orientationBuilder.setTitle("Choose an Orientation");
+                orientationBuilder.setSingleChoiceItems(orientations, -1, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int item) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog = orientationBuilder.create();
                 break;
             default:
                 dialog = null;
