@@ -18,6 +18,9 @@ package com.jetheis.android.makeitrain;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
@@ -39,6 +42,29 @@ public class MakeItRainActivity extends Activity {
         request.addTestDevice("D7C5C55307D200C174CDFD03D70E281C"); // Aria
 
         mAdView.loadAd(request);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_denomination:
+                return true;
+            case R.id.menu_orientation:
+                return true;
+            case R.id.menu_report:
+                return true;
+            case R.id.menu_about:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
