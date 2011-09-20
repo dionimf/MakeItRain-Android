@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,7 +29,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
@@ -41,11 +41,14 @@ public class MakeItRainActivity extends Activity {
     private static final int DIALOG_VIP = 4;
 
     private AdView mAdView;
+    private Resources mResources;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        mResources = getResources();
 
         mAdView = (AdView) findViewById(R.id.adView);
 
@@ -91,26 +94,30 @@ public class MakeItRainActivity extends Activity {
                 AlertDialog.Builder builder;
 
                 LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
-                View layout = inflater.inflate(R.layout.about_dialog,
-                                               (ViewGroup) findViewById(R.id.about_layout));
+                View layout = inflater.inflate(R.layout.about_dialog, (ViewGroup) findViewById(R.id.about_layout));
 
                 TextView text = (TextView) layout.findViewById(R.id.about_text);
-                text.setText("Make It Rain is a just-for-fun Android app.\n\nIt's released under the Apache License 2.0, making it completely free and open source.\n\nThis version is ad-supported, but you're welcome to modify, build, and distribute it however you'd like.\n\nSpecial thanks for the idea to Eric Overton and Jeremy Davis.");
+                text.setText(R.string.about_text);
                 builder = new AlertDialog.Builder(this);
                 builder.setView(layout);
-                builder.setTitle("About Make It Rain");
-                builder.setPositiveButton("Cool, thanks!", null);
+                builder.setTitle(R.string.about_make_it_rain);
+                builder.setPositiveButton(R.string.cool_thanks, null);
                 dialog = builder.create();
                 break;
             case DIALOG_DENOMINATION:
-                final CharSequence[] items = {"$1", "$5", "$10", "$20", "$50 (VIPs Only)", "$100 (VIPs Only)"};
+                final CharSequence[] items = { mResources.getString(R.string.denomination_1),
+                        mResources.getString(R.string.denomination_5), mResources.getString(R.string.denomination_10),
+                        mResources.getString(R.string.denomination_20),
+                        mResources.getString(R.string.denomination_50_vip),
+                        mResources.getString(R.string.denomination_100_vip) };
 
                 AlertDialog.Builder denominationBuilder = new AlertDialog.Builder(this);
-                denominationBuilder.setTitle("Choose a Denomination");
+                denominationBuilder.setTitle(R.string.choose_a_denomination);
                 denominationBuilder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
                         dialog.dismiss();
-                        if (items[item].equals("$50 (VIPs Only)") || items[item].equals("$100 (VIPs Only)")) {
+                        if (items[item].equals(R.string.denomination_50_vip)
+                                || items[item].equals(R.string.denomination_100_vip)) {
                             showDialog(DIALOG_VIP);
                         }
                     }
@@ -118,10 +125,11 @@ public class MakeItRainActivity extends Activity {
                 dialog = denominationBuilder.create();
                 break;
             case DIALOG_ORIENTATION:
-                final CharSequence[] orientations = {"Left", "Right"};
+                final CharSequence[] orientations = { mResources.getString(R.string.orientation_left),
+                        mResources.getString(R.string.orientation_right) };
 
                 AlertDialog.Builder orientationBuilder = new AlertDialog.Builder(this);
-                orientationBuilder.setTitle("Choose an Orientation");
+                orientationBuilder.setTitle(R.string.choose_an_orientation);
                 orientationBuilder.setSingleChoiceItems(orientations, -1, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
                         dialog.dismiss();

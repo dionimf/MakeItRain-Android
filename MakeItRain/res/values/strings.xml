@@ -1,4 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Make It Rain</string>
+	<string name="app_name">Make It Rain</string>
+	<string name="denomination_1">$1</string>
+	<string name="denomination_5">$5</string>
+	<string name="denomination_10">$10</string>
+	<string name="denomination_20">$20</string>
+	<string name="denomination_50_vip">$50 (VIPs Only)</string>
+	<string name="denomination_100_vip">$100 (VIPs Only)</string>
+	<string name="choose_a_denomination">Choose a Denomination</string>
+	<string name="about_text">"Make It Rain is a just-for-fun Android app.
+
+It's released under the Apache License 2.0, making it completely free and open source.
+
+This version is ad-supported, but you're welcome to modify, build, and distribute it however you'd like.
+
+Special thanks for the idea to Eric Overton and Jeremy Davis."</string>
+	<string name="choose_an_orientation">Choose an Orientation</string>
+	<string name="orientation_left">Left</string>
+	<string name="orientation_right">Right</string>
+	<string name="about_make_it_rain">About Make It Rain</string>
+	<string name="cool_thanks">Cool, thanks!</string>
 </resources>

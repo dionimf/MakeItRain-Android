@@ -49,8 +49,7 @@ public class BillView extends SurfaceView implements SurfaceHolder.Callback {
 
         private int mTotalSpent;
 
-        public BillThread(SurfaceHolder surfaceHolder, Context context,
-                Handler handler) {
+        public BillThread(SurfaceHolder surfaceHolder, Context context, Handler handler) {
             mSurfaceHolder = surfaceHolder;
             mContext = context;
 
@@ -58,8 +57,7 @@ public class BillView extends SurfaceView implements SurfaceHolder.Callback {
             mTotalSpent = mPrefs.getInt("totalSpent", 0);
 
             Resources res = context.getResources();
-            mBillImage = BitmapFactory.decodeResource(res,
-                    R.drawable.bill_100_right);
+            mBillImage = BitmapFactory.decodeResource(res, R.drawable.bill_100_right);
             mBillHeight = mBillImage.getHeight();
         }
 
@@ -171,8 +169,7 @@ public class BillView extends SurfaceView implements SurfaceHolder.Callback {
         return false;
     }
 
-    public void surfaceChanged(SurfaceHolder holder, int format, int width,
-            int height) {
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         // TODO Auto-generated method stub
     }
 
