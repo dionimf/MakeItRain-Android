@@ -174,9 +174,9 @@ public class MakeItRainActivity extends Activity {
             case DIALOG_DENOMINATION:
                 final CharSequence[] items = { mResources.getString(R.string.denomination_1),
                         mResources.getString(R.string.denomination_5), mResources.getString(R.string.denomination_10),
-                        mResources.getString(R.string.denomination_20),
-                        mResources.getString(R.string.denomination_50_vip),
-                        mResources.getString(R.string.denomination_100_vip) };
+                        mResources.getString(R.string.denomination_20)};
+                        //mResources.getString(R.string.denomination_50_vip),
+                        //mResources.getString(R.string.denomination_100_vip) };
 
                 int currentIndex = Arrays.asList(items).indexOf(mDenomination);
 
