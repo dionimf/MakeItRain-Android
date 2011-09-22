@@ -61,7 +61,7 @@ public class BillView extends SurfaceView implements SurfaceHolder.Callback {
             mTotalSpent = mPrefs.getInt(context.getString(R.string.pref_total_spent), 0);
 
             mResources = context.getResources();
-            
+
             setImageResource(imageResource);
             setDenomination(denomination);
 
@@ -146,6 +146,8 @@ public class BillView extends SurfaceView implements SurfaceHolder.Callback {
     private BillThread mThread;
     private boolean mDragging = false;
 
+    private Context mContext;
+
     private int mDragYOffset;
     private int mLastMoveY = 0;
     private int mVelocity = 0;
@@ -155,6 +157,8 @@ public class BillView extends SurfaceView implements SurfaceHolder.Callback {
 
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
+
+        mContext = context;
 
         mThread = new BillThread(holder, context, null, R.drawable.bill_1_left, R.string.denomination_1);
 
@@ -194,6 +198,10 @@ public class BillView extends SurfaceView implements SurfaceHolder.Callback {
         return false;
     }
 
+    public BillThread getThread() {
+        return mThread;
+    }
+
     public int getDenomination() {
         return mThread.getDenomination();
     }
@@ -215,8 +223,14 @@ public class BillView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void surfaceCreated(SurfaceHolder holder) {
-        mThread.setIsRunning(true);
-        mThread.start();
+        try {
+            mThread.setIsRunning(true);
+            mThread.start();
+        } catch (IllegalThreadStateException e) {
+            mThread = new BillThread(holder, mContext, null, getImageResource(), getDenomination());
+            mThread.setIsRunning(true);
+            mThread.start();
+        }
     }
 
     public void surfaceDestroyed(SurfaceHolder holder) {

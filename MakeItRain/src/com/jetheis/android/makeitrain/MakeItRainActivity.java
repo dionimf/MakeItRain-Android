@@ -42,6 +42,8 @@ import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 
 public class MakeItRainActivity extends Activity {
+    
+    private static final boolean AD_SUPPORTED = true;
 
     private static final int DIALOG_ABOUT = 1;
     private static final int DIALOG_DENOMINATION = 2;
@@ -102,12 +104,16 @@ public class MakeItRainActivity extends Activity {
         mBillView = (BillView) findViewById(R.id.bills);
         reloadBillAndSave();
 
+        if (AD_SUPPORTED) {
         AdRequest request = new AdRequest();
 
         request.addTestDevice(AdRequest.TEST_EMULATOR);
         request.addTestDevice("D7C5C55307D200C174CDFD03D70E281C"); // Jimmy's
                                                                    // HTC Aria
         mAdView.loadAd(request);
+        } else {
+            mAdView.setVisibility(View.GONE);
+        }
     }
 
     public void reloadBillAndSave() {
