@@ -2,8 +2,8 @@
 <manifest
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.jetheis.android.makeitrain"
-	android:versionCode="2"
-	android:versionName="1.0">
+	android:versionCode="3"
+	android:versionName="1.1dev">
 	<uses-sdk android:minSdkVersion="8"/>
 	<uses-configuration android:reqTouchScreen="finger"/>
 	<application
