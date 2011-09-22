@@ -185,8 +185,8 @@ public class MakeItRainActivity extends Activity {
                 denominationBuilder.setSingleChoiceItems(items, currentIndex, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
                         dialog.dismiss();
-                        if (items[item].equals(R.string.denomination_50_vip)
-                                || items[item].equals(R.string.denomination_100_vip)) {
+                        if (items[item].equals(mResources.getString(R.string.denomination_50_vip))
+                                || items[item].equals(mResources.getString(R.string.denomination_100_vip))) {
                             showDialog(DIALOG_VIP);
                         } else {
                             mDenomination = items[item].toString();
@@ -243,6 +243,23 @@ public class MakeItRainActivity extends Activity {
                     }
                 });
                 dialog = reportBuilder.create();
+                break;
+
+            case DIALOG_VIP:
+                AlertDialog.Builder vipBuilder;
+
+                LayoutInflater vipInflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+                View vipLayout = vipInflater
+                        .inflate(R.layout.about_dialog, (ViewGroup) findViewById(R.id.about_layout));
+
+                TextView vipText = (TextView) vipLayout.findViewById(R.id.about_text);
+                vipText.setText("You need to be a VIP to do that!\n\n - No ads\n -$50 and $100 bills\n - Makes you cooler\n - Only costs a dollar!");
+                vipBuilder = new AlertDialog.Builder(this);
+                vipBuilder.setView(vipLayout);
+                vipBuilder.setTitle("You're Not Cool Enough Yet!");
+                vipBuilder.setPositiveButton("Yeah, I'm cool!", null);
+                vipBuilder.setNegativeButton("No, I'm cheap.", null);
+                dialog = vipBuilder.create();
                 break;
 
             default:

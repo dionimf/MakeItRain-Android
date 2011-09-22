@@ -57,14 +57,14 @@ public class BillView extends SurfaceView implements SurfaceHolder.Callback {
             mSurfaceHolder = surfaceHolder;
             mContext = context;
 
-            setImageResource(imageResource);
-            setDenomination(denomination);
-
             mPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
             mTotalSpent = mPrefs.getInt(context.getString(R.string.pref_total_spent), 0);
 
             mResources = context.getResources();
-            mBillImage = BitmapFactory.decodeResource(mResources, getImageResource());
+            
+            setImageResource(imageResource);
+            setDenomination(denomination);
+
             mBillHeight = mBillImage.getHeight();
         }
 
@@ -157,8 +157,6 @@ public class BillView extends SurfaceView implements SurfaceHolder.Callback {
         holder.addCallback(this);
 
         mThread = new BillThread(holder, context, null, R.drawable.bill_1_left, R.string.denomination_1);
-        mThread.setDenomination(1);
-        mThread.setImageResource(R.drawable.bill_1_left);
 
         setFocusable(true);
     }
