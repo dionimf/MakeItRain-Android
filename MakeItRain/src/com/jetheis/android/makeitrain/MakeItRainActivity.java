@@ -43,7 +43,7 @@ import com.google.ads.AdView;
 
 public class MakeItRainActivity extends Activity {
     
-    private static final boolean AD_SUPPORTED = true;
+    private static final boolean AD_SUPPORTED = false;
 
     private static final int DIALOG_ABOUT = 1;
     private static final int DIALOG_DENOMINATION = 2;
