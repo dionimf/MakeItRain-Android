@@ -19,9 +19,7 @@ package com.jetheis.android.makeitrain;
 import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -107,27 +105,23 @@ public class MakeItRainActivity extends Activity {
         reloadBillAndSave();
 
         if (AD_SUPPORTED) {
-            Set<String> keywords = new HashSet<String>();
-            
-            // An attempt to target the ads to a totally stereotypical demographic
-            keywords.add("club");
-            keywords.add("party");
-            keywords.add("money");
-            keywords.add("free");
-            keywords.add("win");
-            keywords.add("rap");
-            keywords.add("gangster");
-            keywords.add("cash");
-                
             AdRequest request = new AdRequest();
     
             request.addTestDevice(AdRequest.TEST_EMULATOR);
             request.addTestDevice("D7C5C55307D200C174CDFD03D70E281C"); // Jimmy's
                                                                        // HTC Aria
-            // More targeting
+            // Ad targeting
             request.setGender(AdRequest.Gender.MALE);
-            request.setBirthday("19890714");
-            request.setKeywords(keywords);
+            request.setBirthday("19890714"); // My birthday
+            request.addKeyword("club");
+            request.addKeyword("party");
+            request.addKeyword("money");
+            request.addKeyword("win");
+            request.addKeyword("rap");
+            request.addKeyword("hip-hop");
+            request.addKeyword("gangster");
+            request.addKeyword("cash");
+            request.addKeyword("Android");
             
             mAdView.loadAd(request);
         } else {
