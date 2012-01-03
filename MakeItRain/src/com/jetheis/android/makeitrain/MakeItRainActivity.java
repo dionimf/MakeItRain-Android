@@ -38,12 +38,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.ads.AdRequest;
-import com.google.ads.AdView;
-
 public class MakeItRainActivity extends Activity {
-    
-    private static final boolean AD_SUPPORTED = false;
 
     private static final int DIALOG_ABOUT = 1;
     private static final int DIALOG_DENOMINATION = 2;
@@ -51,7 +46,6 @@ public class MakeItRainActivity extends Activity {
     private static final int DIALOG_REPORT = 4;
     private static final int DIALOG_VIP = 5;
 
-    private AdView mAdView;
     private BillView mBillView;
     private Resources mResources;
     private SharedPreferences mPrefs;
@@ -99,34 +93,9 @@ public class MakeItRainActivity extends Activity {
                 mResources.getString(R.string.orientation_left));
         mDenomination = mPrefs.getString(getString(R.string.prefs_denomination),
                 mResources.getString(R.string.denomination_1));
-
-        mAdView = (AdView) findViewById(R.id.adView);
+        
         mBillView = (BillView) findViewById(R.id.bills);
         reloadBillAndSave();
-
-        if (AD_SUPPORTED) {
-            AdRequest request = new AdRequest();
-    
-            request.addTestDevice(AdRequest.TEST_EMULATOR);
-            request.addTestDevice("D7C5C55307D200C174CDFD03D70E281C"); // Jimmy's
-                                                                       // HTC Aria
-            // Ad targeting
-            request.setGender(AdRequest.Gender.MALE);
-            request.setBirthday("19890714"); // My birthday
-            request.addKeyword("club");
-            request.addKeyword("party");
-            request.addKeyword("money");
-            request.addKeyword("win");
-            request.addKeyword("rap");
-            request.addKeyword("hip-hop");
-            request.addKeyword("gangster");
-            request.addKeyword("cash");
-            request.addKeyword("Android");
-            
-            mAdView.loadAd(request);
-        } else {
-            mAdView.setVisibility(View.GONE);
-        }
     }
 
     public void reloadBillAndSave() {
@@ -302,7 +271,6 @@ public class MakeItRainActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        mAdView.destroy();
         super.onDestroy();
     }
 }

@@ -10,9 +10,7 @@
 	<string name="choose_a_denomination">Choose a Denomination</string>
 	<string name="about_text">"Make It Rain is a just-for-fun Android app.
 
-It's released under the Apache License 2.0, making it completely free and open source.
-
-This version is ad-supported, but you're welcome to modify, build, and distribute it however you'd like.
+It's released under the MIT License, making it completely free and open source.
 
 Special thanks for the idea to Eric Overton and Jeremy Davis."</string>
 	<string name="choose_an_orientation">Choose an Orientation</string>
