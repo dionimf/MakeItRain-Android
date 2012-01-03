@@ -1,16 +1,14 @@
 # Make It Rain (Android)
 
-Let me say this up front: This app is entirely built to generate income for me.
-There is no clear business case for this app, it serves no particular purpose
-other than entertainment, and it monetizes a completely unnecessary activity.
+Let me say this up front: There is no clear business case for this app. It
+serves no particular purpose other than entertainment.
 
 With that being said, I had a lot of fun building this app, and I think it's a
 pretty cool idea, even though I've never been to a nightclub or thrown any
 large amount of money in the air.
 
 I'm a fan of open source software, so you'll see that this app is completely
-free and open source, and that I've provided signed builds that are completely
-ad-free for those diligent enough to find this project.
+free and open source (and now ad-free).
 
 Cheers.
 
@@ -21,19 +19,27 @@ Fat Joe or his 2006 single which shares its name.
 
 ## License (Source Code)
 
-Copyright 2011 Jimmy Theis
+The Make It Rain source code is released under the MIT License:
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this software except in compliance with the License.
-You may obtain a copy of the License at
+    Copyright (C) 2012 Jimmy Theis
 
-[http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
+    Permission is hereby granted, free of charge, to any person obtaining a copy of
+    this software and associated documentation files (the "Software"), to deal in
+    the Software without restriction, including without limitation the rights to
+    use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+    of the Software, and to permit persons to whom the Software is furnished to do
+    so, subject to the following conditions:
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
 
 ## License (Images)
 
