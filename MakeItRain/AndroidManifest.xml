@@ -3,7 +3,7 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.jetheis.android.makeitrain"
 	android:versionCode="8"
-	android:versionName="1.3">
+	android:versionName="1.4dev">
 	<uses-sdk android:minSdkVersion="8"/>
 	<uses-configuration android:reqTouchScreen="finger"/>
 	<application
