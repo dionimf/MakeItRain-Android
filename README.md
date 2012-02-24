@@ -45,8 +45,7 @@ The Make It Rain source code is released under the MIT License:
 
 All non-currency images are released under the
 [Creative Commons Attribution 3.0 Unported License](http://creativecommons.org/licenses/by/3.0/).
-You are free to modify and reuse these images, provided that you attribute
-them to [Jimmy Theis](http://jetheis.com) (with link).
+I don't require any attribution.
 
 Because the federal note images in this app are depictions of United States
 currency, they are ineligible for copyright and are part of the public domain.
