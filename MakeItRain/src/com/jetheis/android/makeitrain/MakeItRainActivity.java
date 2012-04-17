@@ -27,7 +27,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -36,6 +35,7 @@ import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,10 +44,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class MakeItRainActivity extends Activity {
+import com.jetheis.android.makeitrain.DenominationDialogFragment.OnDenominationChosenListener;
+
+public class MakeItRainActivity extends FragmentActivity {
 
     private static final int DIALOG_ABOUT = 1;
-    private static final int DIALOG_DENOMINATION = 2;
     private static final int DIALOG_ORIENTATION = 3;
     private static final int DIALOG_REPORT = 4;
     private static final int DIALOG_VIP = 5;
@@ -131,7 +132,17 @@ public class MakeItRainActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case R.id.menu_denomination:
-            showDialog(DIALOG_DENOMINATION);
+            DenominationDialogFragment denominationDialog = new DenominationDialogFragment(
+                    mDenomination, new OnDenominationChosenListener() {
+
+                        @Override
+                        public void onDenominationChosen(String denomination) {
+                            mDenomination = denomination;
+                            reloadBillAndSave();
+                        }
+                    });
+
+            denominationDialog.show(getSupportFragmentManager(), "denonimation");
             return true;
         case R.id.menu_orientation:
             showDialog(DIALOG_ORIENTATION);
@@ -166,36 +177,6 @@ public class MakeItRainActivity extends Activity {
             builder.setTitle(R.string.about_make_it_rain);
             builder.setPositiveButton(R.string.cool_thanks, null);
             dialog = builder.create();
-            break;
-
-        case DIALOG_DENOMINATION:
-            final CharSequence[] items = { mResources.getString(R.string.denomination_1),
-                    mResources.getString(R.string.denomination_5),
-                    mResources.getString(R.string.denomination_10),
-                    mResources.getString(R.string.denomination_20) };
-            // mResources.getString(R.string.denomination_50_vip),
-            // mResources.getString(R.string.denomination_100_vip) };
-
-            int currentIndex = Arrays.asList(items).indexOf(mDenomination);
-
-            AlertDialog.Builder denominationBuilder = new AlertDialog.Builder(this);
-            denominationBuilder.setTitle(R.string.choose_a_denomination);
-            denominationBuilder.setSingleChoiceItems(items, currentIndex,
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int item) {
-                            dialog.dismiss();
-                            if (items[item].equals(mResources
-                                    .getString(R.string.denomination_50_vip))
-                                    || items[item].equals(mResources
-                                            .getString(R.string.denomination_100_vip))) {
-                                showDialog(DIALOG_VIP);
-                            } else {
-                                mDenomination = items[item].toString();
-                                reloadBillAndSave();
-                            }
-                        }
-                    });
-            dialog = denominationBuilder.create();
             break;
 
         case DIALOG_ORIENTATION:
