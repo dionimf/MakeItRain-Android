@@ -1,18 +1,24 @@
-//
-//  Copyright 2011 Jimmy Theis
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-//
+/*
+ * Copyright (C) 2012 Jimmy Theis. Licensed under the MIT License:
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 
 package com.jetheis.android.makeitrain;
 
@@ -78,7 +84,8 @@ public class MakeItRainActivity extends Activity {
         mRightMap.put(mResources.getString(R.string.denomination_10), R.drawable.bill_10_right);
         mRightMap.put(mResources.getString(R.string.denomination_20), R.drawable.bill_20_right);
         mRightMap.put(mResources.getString(R.string.denomination_50_vip), R.drawable.bill_50_right);
-        mRightMap.put(mResources.getString(R.string.denomination_100_vip), R.drawable.bill_100_right);
+        mRightMap.put(mResources.getString(R.string.denomination_100_vip),
+                R.drawable.bill_100_right);
 
         mDenominationValues = new HashMap<String, Integer>();
         mDenominationValues.put(mResources.getString(R.string.denomination_1), 1);
@@ -93,7 +100,7 @@ public class MakeItRainActivity extends Activity {
                 mResources.getString(R.string.orientation_left));
         mDenomination = mPrefs.getString(getString(R.string.prefs_denomination),
                 mResources.getString(R.string.denomination_1));
-        
+
         mBillView = (BillView) findViewById(R.id.bills);
         reloadBillAndSave();
     }
@@ -123,20 +130,20 @@ public class MakeItRainActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_denomination:
-                showDialog(DIALOG_DENOMINATION);
-                return true;
-            case R.id.menu_orientation:
-                showDialog(DIALOG_ORIENTATION);
-                return true;
-            case R.id.menu_report:
-                showDialog(DIALOG_REPORT);
-                return true;
-            case R.id.menu_about:
-                showDialog(DIALOG_ABOUT);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        case R.id.menu_denomination:
+            showDialog(DIALOG_DENOMINATION);
+            return true;
+        case R.id.menu_orientation:
+            showDialog(DIALOG_ORIENTATION);
+            return true;
+        case R.id.menu_report:
+            showDialog(DIALOG_REPORT);
+            return true;
+        case R.id.menu_about:
+            showDialog(DIALOG_ABOUT);
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
         }
     }
 
@@ -144,114 +151,122 @@ public class MakeItRainActivity extends Activity {
     protected Dialog onCreateDialog(int id) {
         Dialog dialog;
         switch (id) {
-            case DIALOG_ABOUT:
-                AlertDialog.Builder builder;
+        case DIALOG_ABOUT:
+            AlertDialog.Builder builder;
 
-                LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
-                View layout = inflater.inflate(R.layout.about_dialog, (ViewGroup) findViewById(R.id.about_layout));
+            LayoutInflater inflater = (LayoutInflater) this
+                    .getSystemService(LAYOUT_INFLATER_SERVICE);
+            View layout = inflater.inflate(R.layout.about_dialog,
+                    (ViewGroup) findViewById(R.id.about_layout));
 
-                TextView text = (TextView) layout.findViewById(R.id.about_text);
-                text.setText(R.string.about_text);
-                builder = new AlertDialog.Builder(this);
-                builder.setView(layout);
-                builder.setTitle(R.string.about_make_it_rain);
-                builder.setPositiveButton(R.string.cool_thanks, null);
-                dialog = builder.create();
-                break;
+            TextView text = (TextView) layout.findViewById(R.id.about_text);
+            text.setText(R.string.about_text);
+            builder = new AlertDialog.Builder(this);
+            builder.setView(layout);
+            builder.setTitle(R.string.about_make_it_rain);
+            builder.setPositiveButton(R.string.cool_thanks, null);
+            dialog = builder.create();
+            break;
 
-            case DIALOG_DENOMINATION:
-                final CharSequence[] items = { mResources.getString(R.string.denomination_1),
-                        mResources.getString(R.string.denomination_5), mResources.getString(R.string.denomination_10),
-                        mResources.getString(R.string.denomination_20)};
-                        //mResources.getString(R.string.denomination_50_vip),
-                        //mResources.getString(R.string.denomination_100_vip) };
+        case DIALOG_DENOMINATION:
+            final CharSequence[] items = { mResources.getString(R.string.denomination_1),
+                    mResources.getString(R.string.denomination_5),
+                    mResources.getString(R.string.denomination_10),
+                    mResources.getString(R.string.denomination_20) };
+            // mResources.getString(R.string.denomination_50_vip),
+            // mResources.getString(R.string.denomination_100_vip) };
 
-                int currentIndex = Arrays.asList(items).indexOf(mDenomination);
+            int currentIndex = Arrays.asList(items).indexOf(mDenomination);
 
-                AlertDialog.Builder denominationBuilder = new AlertDialog.Builder(this);
-                denominationBuilder.setTitle(R.string.choose_a_denomination);
-                denominationBuilder.setSingleChoiceItems(items, currentIndex, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int item) {
-                        dialog.dismiss();
-                        if (items[item].equals(mResources.getString(R.string.denomination_50_vip))
-                                || items[item].equals(mResources.getString(R.string.denomination_100_vip))) {
-                            showDialog(DIALOG_VIP);
-                        } else {
-                            mDenomination = items[item].toString();
-                            reloadBillAndSave();
-                        }
-                    }
-                });
-                dialog = denominationBuilder.create();
-                break;
-
-            case DIALOG_ORIENTATION:
-                final CharSequence[] orientations = { mResources.getString(R.string.orientation_left),
-                        mResources.getString(R.string.orientation_right) };
-
-                int currentOrientation = Arrays.asList(orientations).indexOf(mOrientation);
-
-                AlertDialog.Builder orientationBuilder = new AlertDialog.Builder(this);
-                orientationBuilder.setTitle(R.string.choose_an_orientation);
-                orientationBuilder.setSingleChoiceItems(orientations, currentOrientation,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int item) {
-                                mOrientation = orientations[item].toString();
+            AlertDialog.Builder denominationBuilder = new AlertDialog.Builder(this);
+            denominationBuilder.setTitle(R.string.choose_a_denomination);
+            denominationBuilder.setSingleChoiceItems(items, currentIndex,
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int item) {
+                            dialog.dismiss();
+                            if (items[item].equals(mResources
+                                    .getString(R.string.denomination_50_vip))
+                                    || items[item].equals(mResources
+                                            .getString(R.string.denomination_100_vip))) {
+                                showDialog(DIALOG_VIP);
+                            } else {
+                                mDenomination = items[item].toString();
                                 reloadBillAndSave();
-                                dialog.dismiss();
                             }
-                        });
-                dialog = orientationBuilder.create();
-                break;
+                        }
+                    });
+            dialog = denominationBuilder.create();
+            break;
 
-            case DIALOG_REPORT:
-                AlertDialog.Builder reportBuilder;
+        case DIALOG_ORIENTATION:
+            final CharSequence[] orientations = { mResources.getString(R.string.orientation_left),
+                    mResources.getString(R.string.orientation_right) };
 
-                LayoutInflater reportInflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
-                View reportLayout = reportInflater.inflate(R.layout.about_dialog,
-                        (ViewGroup) findViewById(R.id.about_layout));
+            int currentOrientation = Arrays.asList(orientations).indexOf(mOrientation);
 
-                int spent = mPrefs.getInt(mResources.getString(R.string.pref_total_spent), 0);
+            AlertDialog.Builder orientationBuilder = new AlertDialog.Builder(this);
+            orientationBuilder.setTitle(R.string.choose_an_orientation);
+            orientationBuilder.setSingleChoiceItems(orientations, currentOrientation,
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int item) {
+                            mOrientation = orientations[item].toString();
+                            reloadBillAndSave();
+                            dialog.dismiss();
+                        }
+                    });
+            dialog = orientationBuilder.create();
+            break;
 
-                NumberFormat nf = NumberFormat.getCurrencyInstance();
-                String spentDisplay = nf.format(spent);
+        case DIALOG_REPORT:
+            AlertDialog.Builder reportBuilder;
 
-                TextView reportText = (TextView) reportLayout.findViewById(R.id.about_text);
-                reportText.setText(mResources.getString(R.string.total_spent, spentDisplay));
-                reportBuilder = new AlertDialog.Builder(this);
-                reportBuilder.setView(reportLayout);
-                reportBuilder.setTitle(R.string.your_spending_report);
-                reportBuilder.setPositiveButton(R.string.im_so_cool, null);
-                reportBuilder.setNegativeButton(R.string.reset, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int item) {
-                        dialog.dismiss();
-                        Editor editor = mPrefs.edit();
-                        editor.putInt(mResources.getString(R.string.pref_total_spent), 0);
-                        editor.commit();
-                    }
-                });
-                dialog = reportBuilder.create();
-                break;
+            LayoutInflater reportInflater = (LayoutInflater) this
+                    .getSystemService(LAYOUT_INFLATER_SERVICE);
+            View reportLayout = reportInflater.inflate(R.layout.about_dialog,
+                    (ViewGroup) findViewById(R.id.about_layout));
 
-            case DIALOG_VIP:
-                AlertDialog.Builder vipBuilder;
+            int spent = mPrefs.getInt(mResources.getString(R.string.pref_total_spent), 0);
 
-                LayoutInflater vipInflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
-                View vipLayout = vipInflater
-                        .inflate(R.layout.about_dialog, (ViewGroup) findViewById(R.id.about_layout));
+            NumberFormat nf = NumberFormat.getCurrencyInstance();
+            String spentDisplay = nf.format(spent);
 
-                TextView vipText = (TextView) vipLayout.findViewById(R.id.about_text);
-                vipText.setText("You need to be a VIP to do that!\n\n - No ads\n -$50 and $100 bills\n - Makes you cooler\n - Only costs a dollar!");
-                vipBuilder = new AlertDialog.Builder(this);
-                vipBuilder.setView(vipLayout);
-                vipBuilder.setTitle("You're Not Cool Enough Yet!");
-                vipBuilder.setPositiveButton("Yeah, I'm cool!", null);
-                vipBuilder.setNegativeButton("No, I'm cheap.", null);
-                dialog = vipBuilder.create();
-                break;
+            TextView reportText = (TextView) reportLayout.findViewById(R.id.about_text);
+            reportText.setText(mResources.getString(R.string.total_spent, spentDisplay));
+            reportBuilder = new AlertDialog.Builder(this);
+            reportBuilder.setView(reportLayout);
+            reportBuilder.setTitle(R.string.your_spending_report);
+            reportBuilder.setPositiveButton(R.string.im_so_cool, null);
+            reportBuilder.setNegativeButton(R.string.reset, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int item) {
+                    dialog.dismiss();
+                    Editor editor = mPrefs.edit();
+                    editor.putInt(mResources.getString(R.string.pref_total_spent), 0);
+                    editor.commit();
+                }
+            });
+            dialog = reportBuilder.create();
+            break;
 
-            default:
-                dialog = null;
+        case DIALOG_VIP:
+            AlertDialog.Builder vipBuilder;
+
+            LayoutInflater vipInflater = (LayoutInflater) this
+                    .getSystemService(LAYOUT_INFLATER_SERVICE);
+            View vipLayout = vipInflater.inflate(R.layout.about_dialog,
+                    (ViewGroup) findViewById(R.id.about_layout));
+
+            TextView vipText = (TextView) vipLayout.findViewById(R.id.about_text);
+            vipText.setText("You need to be a VIP to do that!\n\n - No ads\n -$50 and $100 bills\n - Makes you cooler\n - Only costs a dollar!");
+            vipBuilder = new AlertDialog.Builder(this);
+            vipBuilder.setView(vipLayout);
+            vipBuilder.setTitle("You're Not Cool Enough Yet!");
+            vipBuilder.setPositiveButton("Yeah, I'm cool!", null);
+            vipBuilder.setNegativeButton("No, I'm cheap.", null);
+            dialog = vipBuilder.create();
+            break;
+
+        default:
+            dialog = null;
         }
         return dialog;
     }
@@ -259,12 +274,12 @@ public class MakeItRainActivity extends Activity {
     @Override
     protected void onPrepareDialog(int id, Dialog dialog) {
         switch (id) {
-            case DIALOG_REPORT:
-                int spent = mPrefs.getInt(mResources.getString(R.string.pref_total_spent), 0);
-                NumberFormat nf = NumberFormat.getCurrencyInstance();
-                String spentDisplay = nf.format(spent);
-                ((TextView) ((AlertDialog) dialog).findViewById(R.id.about_text)).setText(mResources.getString(
-                        R.string.total_spent, spentDisplay));
+        case DIALOG_REPORT:
+            int spent = mPrefs.getInt(mResources.getString(R.string.pref_total_spent), 0);
+            NumberFormat nf = NumberFormat.getCurrencyInstance();
+            String spentDisplay = nf.format(spent);
+            ((TextView) ((AlertDialog) dialog).findViewById(R.id.about_text)).setText(mResources
+                    .getString(R.string.total_spent, spentDisplay));
         }
         super.onPrepareDialog(id, dialog);
     }

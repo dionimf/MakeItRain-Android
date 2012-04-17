@@ -1,18 +1,24 @@
-//
-//  Copyright 2011 Jimmy Theis
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-//
+/*
+ * Copyright (C) 2012 Jimmy Theis. Licensed under the MIT License:
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 
 package com.jetheis.android.makeitrain;
 
@@ -52,8 +58,8 @@ public class BillView extends SurfaceView implements SurfaceHolder.Callback {
         private int mDenomination;
         private int mTotalSpent;
 
-        public BillThread(SurfaceHolder surfaceHolder, Context context, Handler handler, int imageResource,
-                int denomination) {
+        public BillThread(SurfaceHolder surfaceHolder, Context context, Handler handler,
+                int imageResource, int denomination) {
             mSurfaceHolder = surfaceHolder;
             mContext = context;
 
@@ -160,7 +166,8 @@ public class BillView extends SurfaceView implements SurfaceHolder.Callback {
 
         mContext = context;
 
-        mThread = new BillThread(holder, context, null, R.drawable.bill_1_left, R.string.denomination_1);
+        mThread = new BillThread(holder, context, null, R.drawable.bill_1_left,
+                R.string.denomination_1);
 
         setFocusable(true);
     }
@@ -175,24 +182,24 @@ public class BillView extends SurfaceView implements SurfaceHolder.Callback {
 
         switch (event.getAction()) {
 
-            case MotionEvent.ACTION_DOWN:
-                mDragging = true;
-                mDragYOffset = (int) event.getY();
-                return true;
+        case MotionEvent.ACTION_DOWN:
+            mDragging = true;
+            mDragYOffset = (int) event.getY();
+            return true;
 
-            case MotionEvent.ACTION_MOVE:
-                if (mDragging) {
-                    int newY = (int) event.getY() - mDragYOffset;
-                    mVelocity = Math.min(Math.max(mLastMoveY - newY, 80), 150);
-                    mLastMoveY = newY;
-                    mThread.updateBillPostion(Math.min(0, newY));
-                }
-                return true;
+        case MotionEvent.ACTION_MOVE:
+            if (mDragging) {
+                int newY = (int) event.getY() - mDragYOffset;
+                mVelocity = Math.min(Math.max(mLastMoveY - newY, 80), 150);
+                mLastMoveY = newY;
+                mThread.updateBillPostion(Math.min(0, newY));
+            }
+            return true;
 
-            case MotionEvent.ACTION_UP:
-                mDragging = false;
-                mThread.initiateFling(mVelocity);
-                return true;
+        case MotionEvent.ACTION_UP:
+            mDragging = false;
+            mThread.initiateFling(mVelocity);
+            return true;
         }
 
         return false;
