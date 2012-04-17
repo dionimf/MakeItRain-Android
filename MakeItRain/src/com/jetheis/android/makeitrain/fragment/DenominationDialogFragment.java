@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package com.jetheis.android.makeitrain;
+package com.jetheis.android.makeitrain.fragment;
 
 import java.util.Arrays;
 
@@ -30,6 +30,8 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+
+import com.jetheis.android.makeitrain.R;
 
 public class DenominationDialogFragment extends DialogFragment {
 

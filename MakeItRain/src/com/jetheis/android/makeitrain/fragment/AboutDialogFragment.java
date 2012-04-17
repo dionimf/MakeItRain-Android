@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package com.jetheis.android.makeitrain;
+package com.jetheis.android.makeitrain.fragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -31,6 +31,8 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+
+import com.jetheis.android.makeitrain.R;
 
 public class AboutDialogFragment extends DialogFragment {
 

@@ -44,7 +44,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.jetheis.android.makeitrain.DenominationDialogFragment.OnDenominationChosenListener;
+import com.jetheis.android.makeitrain.fragment.AboutDialogFragment;
+import com.jetheis.android.makeitrain.fragment.DenominationDialogFragment;
+import com.jetheis.android.makeitrain.fragment.DenominationDialogFragment.OnDenominationChosenListener;
 
 public class MakeItRainActivity extends FragmentActivity {
 
