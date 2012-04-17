@@ -143,7 +143,8 @@ public class MakeItRainActivity extends FragmentActivity {
                         }
                     });
 
-            denominationDialog.show(getSupportFragmentManager(), "denonimation");
+            denominationDialog.show(getSupportFragmentManager(), "denonimation"); // TODO:
+                                                                                  // Tag
             return true;
         case R.id.menu_orientation:
             OrientationDialogFragment orientationDialog = new OrientationDialogFragment(
@@ -157,13 +158,15 @@ public class MakeItRainActivity extends FragmentActivity {
 
                     });
 
-            orientationDialog.show(getSupportFragmentManager(), "orientation");
+            orientationDialog.show(getSupportFragmentManager(), "orientation"); // TODO:
+                                                                                // Tag
             return true;
         case R.id.menu_report:
             showDialog(DIALOG_REPORT);
             return true;
         case R.id.menu_about:
-            new AboutDialogFragment().show(getSupportFragmentManager(), "about");
+            new AboutDialogFragment().show(getSupportFragmentManager(), "about"); // TODO:
+                                                                                  // Tag
             return true;
         default:
             return super.onOptionsItemSelected(item);
