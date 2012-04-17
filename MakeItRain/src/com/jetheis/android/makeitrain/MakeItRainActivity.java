@@ -23,7 +23,6 @@
 package com.jetheis.android.makeitrain;
 
 import java.text.NumberFormat;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,10 +46,11 @@ import android.widget.TextView;
 import com.jetheis.android.makeitrain.fragment.AboutDialogFragment;
 import com.jetheis.android.makeitrain.fragment.DenominationDialogFragment;
 import com.jetheis.android.makeitrain.fragment.DenominationDialogFragment.OnDenominationChosenListener;
+import com.jetheis.android.makeitrain.fragment.OrientationDialogFragment;
+import com.jetheis.android.makeitrain.fragment.OrientationDialogFragment.OnOrientationChosenListener;
 
 public class MakeItRainActivity extends FragmentActivity {
 
-    private static final int DIALOG_ORIENTATION = 3;
     private static final int DIALOG_REPORT = 4;
     private static final int DIALOG_VIP = 5;
 
@@ -146,7 +146,18 @@ public class MakeItRainActivity extends FragmentActivity {
             denominationDialog.show(getSupportFragmentManager(), "denonimation");
             return true;
         case R.id.menu_orientation:
-            showDialog(DIALOG_ORIENTATION);
+            OrientationDialogFragment orientationDialog = new OrientationDialogFragment(
+                    mOrientation, new OnOrientationChosenListener() {
+
+                        @Override
+                        public void onOrientationChosen(String orientation) {
+                            mOrientation = orientation;
+                            reloadBillAndSave();
+                        }
+
+                    });
+
+            orientationDialog.show(getSupportFragmentManager(), "orientation");
             return true;
         case R.id.menu_report:
             showDialog(DIALOG_REPORT);
@@ -163,25 +174,6 @@ public class MakeItRainActivity extends FragmentActivity {
     protected Dialog onCreateDialog(int id) {
         Dialog dialog;
         switch (id) {
-
-        case DIALOG_ORIENTATION:
-            final CharSequence[] orientations = { mResources.getString(R.string.orientation_left),
-                    mResources.getString(R.string.orientation_right) };
-
-            int currentOrientation = Arrays.asList(orientations).indexOf(mOrientation);
-
-            AlertDialog.Builder orientationBuilder = new AlertDialog.Builder(this);
-            orientationBuilder.setTitle(R.string.choose_an_orientation);
-            orientationBuilder.setSingleChoiceItems(orientations, currentOrientation,
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int item) {
-                            mOrientation = orientations[item].toString();
-                            reloadBillAndSave();
-                            dialog.dismiss();
-                        }
-                    });
-            dialog = orientationBuilder.create();
-            break;
 
         case DIALOG_REPORT:
             AlertDialog.Builder reportBuilder;
