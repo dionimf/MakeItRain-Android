@@ -108,6 +108,10 @@ public class BillView extends SurfaceView implements SurfaceHolder.Callback {
         }
 
         private void drawOn(Canvas canvas) {
+            if (canvas == null) {
+                return;
+            }
+
             if (isFlinging() && mBillY > -mBillHeight) {
                 mBillY -= mFlingVelocity;
             } else if (isFlinging()) {
