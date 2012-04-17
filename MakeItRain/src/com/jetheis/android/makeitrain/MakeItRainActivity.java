@@ -48,7 +48,6 @@ import com.jetheis.android.makeitrain.DenominationDialogFragment.OnDenominationC
 
 public class MakeItRainActivity extends FragmentActivity {
 
-    private static final int DIALOG_ABOUT = 1;
     private static final int DIALOG_ORIENTATION = 3;
     private static final int DIALOG_REPORT = 4;
     private static final int DIALOG_VIP = 5;
@@ -151,7 +150,7 @@ public class MakeItRainActivity extends FragmentActivity {
             showDialog(DIALOG_REPORT);
             return true;
         case R.id.menu_about:
-            showDialog(DIALOG_ABOUT);
+            new AboutDialogFragment().show(getSupportFragmentManager(), "about");
             return true;
         default:
             return super.onOptionsItemSelected(item);
@@ -162,22 +161,6 @@ public class MakeItRainActivity extends FragmentActivity {
     protected Dialog onCreateDialog(int id) {
         Dialog dialog;
         switch (id) {
-        case DIALOG_ABOUT:
-            AlertDialog.Builder builder;
-
-            LayoutInflater inflater = (LayoutInflater) this
-                    .getSystemService(LAYOUT_INFLATER_SERVICE);
-            View layout = inflater.inflate(R.layout.about_dialog,
-                    (ViewGroup) findViewById(R.id.about_layout));
-
-            TextView text = (TextView) layout.findViewById(R.id.about_text);
-            text.setText(R.string.about_text);
-            builder = new AlertDialog.Builder(this);
-            builder.setView(layout);
-            builder.setTitle(R.string.about_make_it_rain);
-            builder.setPositiveButton(R.string.cool_thanks, null);
-            dialog = builder.create();
-            break;
 
         case DIALOG_ORIENTATION:
             final CharSequence[] orientations = { mResources.getString(R.string.orientation_left),
