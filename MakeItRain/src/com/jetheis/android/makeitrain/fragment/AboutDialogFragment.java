@@ -43,9 +43,9 @@ public class AboutDialogFragment extends DialogFragment {
 
         LayoutInflater inflater = (LayoutInflater) activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View layout = inflater.inflate(R.layout.about_dialog, null);
+        View layout = inflater.inflate(R.layout.about_dialog_fragment, null);
 
-        TextView text = (TextView) layout.findViewById(R.id.about_text);
+        TextView text = (TextView) layout.findViewById(R.id.about_dialog_fragment_text_view);
         text.setText(R.string.about_text);
         
         builder = new AlertDialog.Builder(activity);

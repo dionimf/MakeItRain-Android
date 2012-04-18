@@ -22,13 +22,11 @@
 
 package com.jetheis.android.makeitrain;
 
-import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
@@ -40,7 +38,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.jetheis.android.makeitrain.fragment.AboutDialogFragment;
@@ -48,10 +45,15 @@ import com.jetheis.android.makeitrain.fragment.DenominationDialogFragment;
 import com.jetheis.android.makeitrain.fragment.DenominationDialogFragment.OnDenominationChosenListener;
 import com.jetheis.android.makeitrain.fragment.OrientationDialogFragment;
 import com.jetheis.android.makeitrain.fragment.OrientationDialogFragment.OnOrientationChosenListener;
+import com.jetheis.android.makeitrain.fragment.ReportDialogFragment;
 
 public class MakeItRainActivity extends FragmentActivity {
 
-    private static final int DIALOG_REPORT = 4;
+    private static final String ABOUT_DIALOG_TAG = "about";
+    private static final String REPORT_DIALOG_TAG = "report";
+    private static final String DENOMINATION_DIALOG_TAG = "denomination";
+    private static final String ORIENTATION_DIALOG_TAG = "orientation";
+
     private static final int DIALOG_VIP = 5;
 
     private BillView mBillView;
@@ -68,7 +70,7 @@ public class MakeItRainActivity extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.make_it_rain_activity);
 
         mResources = getResources();
 
@@ -125,14 +127,15 @@ public class MakeItRainActivity extends FragmentActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
+        inflater.inflate(R.menu.make_it_rain_activity_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case R.id.menu_denomination:
+
+        case R.id.make_it_rain_activity_menu_denomination:
             DenominationDialogFragment denominationDialog = new DenominationDialogFragment(
                     mDenomination, new OnDenominationChosenListener() {
 
@@ -143,10 +146,10 @@ public class MakeItRainActivity extends FragmentActivity {
                         }
                     });
 
-            denominationDialog.show(getSupportFragmentManager(), "denonimation"); // TODO:
-                                                                                  // Tag
+            denominationDialog.show(getSupportFragmentManager(), DENOMINATION_DIALOG_TAG);
             return true;
-        case R.id.menu_orientation:
+
+        case R.id.make_it_rain_activity_menu_orientation:
             OrientationDialogFragment orientationDialog = new OrientationDialogFragment(
                     mOrientation, new OnOrientationChosenListener() {
 
@@ -158,16 +161,17 @@ public class MakeItRainActivity extends FragmentActivity {
 
                     });
 
-            orientationDialog.show(getSupportFragmentManager(), "orientation"); // TODO:
-                                                                                // Tag
+            orientationDialog.show(getSupportFragmentManager(), ORIENTATION_DIALOG_TAG);
             return true;
-        case R.id.menu_report:
-            showDialog(DIALOG_REPORT);
+
+        case R.id.make_it_rain_activity_menu_report:
+            new ReportDialogFragment().show(getSupportFragmentManager(), REPORT_DIALOG_TAG);
             return true;
-        case R.id.menu_about:
-            new AboutDialogFragment().show(getSupportFragmentManager(), "about"); // TODO:
-                                                                                  // Tag
+
+        case R.id.make_it_rain_activity_menu_about:
+            new AboutDialogFragment().show(getSupportFragmentManager(), ABOUT_DIALOG_TAG);
             return true;
+
         default:
             return super.onOptionsItemSelected(item);
         }
@@ -178,45 +182,15 @@ public class MakeItRainActivity extends FragmentActivity {
         Dialog dialog;
         switch (id) {
 
-        case DIALOG_REPORT:
-            AlertDialog.Builder reportBuilder;
-
-            LayoutInflater reportInflater = (LayoutInflater) this
-                    .getSystemService(LAYOUT_INFLATER_SERVICE);
-            View reportLayout = reportInflater.inflate(R.layout.about_dialog,
-                    (ViewGroup) findViewById(R.id.about_layout));
-
-            int spent = mPrefs.getInt(mResources.getString(R.string.pref_total_spent), 0);
-
-            NumberFormat nf = NumberFormat.getCurrencyInstance();
-            String spentDisplay = nf.format(spent);
-
-            TextView reportText = (TextView) reportLayout.findViewById(R.id.about_text);
-            reportText.setText(mResources.getString(R.string.total_spent, spentDisplay));
-            reportBuilder = new AlertDialog.Builder(this);
-            reportBuilder.setView(reportLayout);
-            reportBuilder.setTitle(R.string.your_spending_report);
-            reportBuilder.setPositiveButton(R.string.im_so_cool, null);
-            reportBuilder.setNegativeButton(R.string.reset, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int item) {
-                    dialog.dismiss();
-                    Editor editor = mPrefs.edit();
-                    editor.putInt(mResources.getString(R.string.pref_total_spent), 0);
-                    editor.commit();
-                }
-            });
-            dialog = reportBuilder.create();
-            break;
-
         case DIALOG_VIP:
             AlertDialog.Builder vipBuilder;
 
             LayoutInflater vipInflater = (LayoutInflater) this
                     .getSystemService(LAYOUT_INFLATER_SERVICE);
-            View vipLayout = vipInflater.inflate(R.layout.about_dialog,
-                    (ViewGroup) findViewById(R.id.about_layout));
+            View vipLayout = vipInflater.inflate(R.layout.vip_dialog_fragment, null);
 
-            TextView vipText = (TextView) vipLayout.findViewById(R.id.about_text);
+            TextView vipText = (TextView) vipLayout
+                    .findViewById(R.id.vip_dialog_fragment_text_view);
             vipText.setText("You need to be a VIP to do that!\n\n - No ads\n -$50 and $100 bills\n - Makes you cooler\n - Only costs a dollar!");
             vipBuilder = new AlertDialog.Builder(this);
             vipBuilder.setView(vipLayout);
@@ -230,23 +204,5 @@ public class MakeItRainActivity extends FragmentActivity {
             dialog = null;
         }
         return dialog;
-    }
-
-    @Override
-    protected void onPrepareDialog(int id, Dialog dialog) {
-        switch (id) {
-        case DIALOG_REPORT:
-            int spent = mPrefs.getInt(mResources.getString(R.string.pref_total_spent), 0);
-            NumberFormat nf = NumberFormat.getCurrencyInstance();
-            String spentDisplay = nf.format(spent);
-            ((TextView) ((AlertDialog) dialog).findViewById(R.id.about_text)).setText(mResources
-                    .getString(R.string.total_spent, spentDisplay));
-        }
-        super.onPrepareDialog(id, dialog);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 }
