@@ -21,32 +21,32 @@
    SOFTWARE.
 -->
 <resources>
-	<string name="app_name">Make It Rain</string>
-	<string name="denomination_1">$1</string>
-	<string name="denomination_5">$5</string>
-	<string name="denomination_10">$10</string>
-	<string name="denomination_20">$20</string>
+    <string name="app_name">Make It Rain</string>
+    <string name="denomination_1">$1</string>
+    <string name="denomination_5">$5</string>
+    <string name="denomination_10">$10</string>
+    <string name="denomination_20">$20</string>
     <string name="denomination_50">$50</string>
     <string name="denomination_100">$100</string>
-	<string name="denomination_50_vip">$50 (VIPs Only)</string>
-	<string name="denomination_100_vip">$100 (VIPs Only)</string>
-	<string name="choose_a_denomination">Choose a Denomination</string>
-	<string name="about_text">"Make It Rain is a just-for-fun Android app.
+    <string name="denomination_50_vip">$50 (VIPs Only)</string>
+    <string name="denomination_100_vip">$100 (VIPs Only)</string>
+    <string name="choose_a_denomination">Choose a Denomination</string>
+    <string name="about_text">"Make It Rain is a just-for-fun Android app.
 
 It's released under the MIT License, making it completely free and open source.
 
 Special thanks for the idea to Eric Overton and Jeremy Davis."</string>
-	<string name="choose_an_orientation">Choose an Orientation</string>
-	<string name="orientation_left">Left</string>
-	<string name="orientation_right">Right</string>
-	<string name="about_make_it_rain">About Make It Rain</string>
-	<string name="cool_thanks">Cool, thanks!</string>
-	<string name="pref_total_spent">totalSpent</string>
-	<string name="prefs_orientation">orientation</string>
-	<string name="prefs_denomination">denomination</string>
+    <string name="choose_an_orientation">Choose an Orientation</string>
+    <string name="orientation_left">Left</string>
+    <string name="orientation_right">Right</string>
+    <string name="about_make_it_rain">About Make It Rain</string>
+    <string name="cool_thanks">Cool, thanks!</string>
+    <string name="pref_total_spent">totalSpent</string>
+    <string name="prefs_orientation">orientation</string>
+    <string name="prefs_denomination">denomination</string>
     <string name="prefs_vip_mode">vip_mode</string>
-	<string name="total_spent">Total Rainfall: %s</string>
-	<string name="your_spending_report">Your Spending Report</string>
-	<string name="im_so_cool">I\'m so cool</string>
-	<string name="reset">Reset</string>
+    <string name="total_spent">Total Rainfall: %s</string>
+    <string name="your_spending_report">Your Spending Report</string>
+    <string name="im_so_cool">I\'m so cool</string>
+    <string name="reset">Reset</string>
 </resources>

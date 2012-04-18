@@ -37,9 +37,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.jetheis.android.makeitrain.billing.GooglePlayBillingWrapper;
-import com.jetheis.android.makeitrain.billing.GooglePlayBillingWrapper.OnGooglePlayBillingReadyListener;
-import com.jetheis.android.makeitrain.billing.GooglePlayBillingWrapper.OnGooglePlayVipModePurchaseFoundListener;
+import com.jetheis.android.makeitrain.billing.googleplay.GooglePlayBillingWrapper;
+import com.jetheis.android.makeitrain.billing.googleplay.GooglePlayBillingWrapper.OnGooglePlayBillingReadyListener;
+import com.jetheis.android.makeitrain.billing.googleplay.GooglePlayBillingWrapper.OnGooglePlayVipModePurchaseFoundListener;
 import com.jetheis.android.makeitrain.fragment.AboutDialogFragment;
 import com.jetheis.android.makeitrain.fragment.DenominationDialogFragment;
 import com.jetheis.android.makeitrain.fragment.DenominationDialogFragment.OnDenominationChosenListener;

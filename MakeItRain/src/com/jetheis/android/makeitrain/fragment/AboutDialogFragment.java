@@ -47,12 +47,12 @@ public class AboutDialogFragment extends DialogFragment {
 
         TextView text = (TextView) layout.findViewById(R.id.about_dialog_fragment_text_view);
         text.setText(R.string.about_text);
-        
+
         builder = new AlertDialog.Builder(activity);
         builder.setView(layout);
         builder.setTitle(R.string.about_make_it_rain);
         builder.setPositiveButton(R.string.cool_thanks, null);
-        
+
         return builder.create();
     }
 
