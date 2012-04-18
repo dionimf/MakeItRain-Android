@@ -22,8 +22,44 @@
 
 package com.jetheis.android.makeitrain.fragment;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
+
+import com.jetheis.android.makeitrain.R;
 
 public class VipDialogFragment extends DialogFragment {
-    // TODO
+    
+    
+    public VipDialogFragment(boolean rejection) {
+        
+    }
+    
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Activity activity = getActivity();
+        
+        AlertDialog.Builder vipBuilder;
+
+        LayoutInflater vipInflater = (LayoutInflater) activity
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View vipLayout = vipInflater.inflate(R.layout.vip_dialog_fragment, null);
+
+        TextView vipText = (TextView) vipLayout
+                .findViewById(R.id.vip_dialog_fragment_text_view);
+        vipText.setText("You need to be a VIP to do that!\n\n - No ads\n -$50 and $100 bills\n - Makes you cooler\n - Only costs a dollar!");
+        vipBuilder = new AlertDialog.Builder(activity);
+        vipBuilder.setView(vipLayout);
+        vipBuilder.setTitle("You're Not Cool Enough Yet!");
+        vipBuilder.setPositiveButton("Yeah, I'm cool!", null);
+        vipBuilder.setNegativeButton("No, I'm cheap.", null);
+        
+        return vipBuilder.create();
+    }
 }

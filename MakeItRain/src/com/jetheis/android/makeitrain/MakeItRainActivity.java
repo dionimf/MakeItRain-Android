@@ -25,20 +25,15 @@ package com.jetheis.android.makeitrain;
 import java.util.HashMap;
 import java.util.Map;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
 import com.jetheis.android.makeitrain.fragment.AboutDialogFragment;
 import com.jetheis.android.makeitrain.fragment.DenominationDialogFragment;
@@ -46,6 +41,7 @@ import com.jetheis.android.makeitrain.fragment.DenominationDialogFragment.OnDeno
 import com.jetheis.android.makeitrain.fragment.OrientationDialogFragment;
 import com.jetheis.android.makeitrain.fragment.OrientationDialogFragment.OnOrientationChosenListener;
 import com.jetheis.android.makeitrain.fragment.ReportDialogFragment;
+import com.jetheis.android.makeitrain.fragment.VipDialogFragment;
 
 public class MakeItRainActivity extends FragmentActivity {
 
@@ -53,8 +49,7 @@ public class MakeItRainActivity extends FragmentActivity {
     private static final String REPORT_DIALOG_TAG = "report";
     private static final String DENOMINATION_DIALOG_TAG = "denomination";
     private static final String ORIENTATION_DIALOG_TAG = "orientation";
-
-    private static final int DIALOG_VIP = 5;
+    private static final String VIP_DIALOG_TAG = "vip";
 
     private BillView mBillView;
     private Resources mResources;
@@ -172,37 +167,12 @@ public class MakeItRainActivity extends FragmentActivity {
             new AboutDialogFragment().show(getSupportFragmentManager(), ABOUT_DIALOG_TAG);
             return true;
 
+        case R.id.make_it_rain_activity_menu_vip:
+            new VipDialogFragment(false).show(getSupportFragmentManager(), VIP_DIALOG_TAG);
+            return true;
+
         default:
             return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        Dialog dialog;
-        switch (id) {
-
-        case DIALOG_VIP:
-            AlertDialog.Builder vipBuilder;
-
-            LayoutInflater vipInflater = (LayoutInflater) this
-                    .getSystemService(LAYOUT_INFLATER_SERVICE);
-            View vipLayout = vipInflater.inflate(R.layout.vip_dialog_fragment, null);
-
-            TextView vipText = (TextView) vipLayout
-                    .findViewById(R.id.vip_dialog_fragment_text_view);
-            vipText.setText("You need to be a VIP to do that!\n\n - No ads\n -$50 and $100 bills\n - Makes you cooler\n - Only costs a dollar!");
-            vipBuilder = new AlertDialog.Builder(this);
-            vipBuilder.setView(vipLayout);
-            vipBuilder.setTitle("You're Not Cool Enough Yet!");
-            vipBuilder.setPositiveButton("Yeah, I'm cool!", null);
-            vipBuilder.setNegativeButton("No, I'm cheap.", null);
-            dialog = vipBuilder.create();
-            break;
-
-        default:
-            dialog = null;
-        }
-        return dialog;
     }
 }

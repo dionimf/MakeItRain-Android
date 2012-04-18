@@ -16,4 +16,8 @@
         android:id="@+id/make_it_rain_activity_menu_about"
         android:icon="@drawable/ic_menu_info_details"
         android:title="About"/>
+    <item
+        android:id="@+id/make_it_rain_activity_menu_vip"
+        android:icon="@drawable/ic_menu_info_details"
+        android:title="Get VIP"/>
 </menu>
