@@ -5,6 +5,8 @@
 	<string name="denomination_5">$5</string>
 	<string name="denomination_10">$10</string>
 	<string name="denomination_20">$20</string>
+    <string name="denomination_50">$50</string>
+    <string name="denomination_100">$100</string>
 	<string name="denomination_50_vip">$50 (VIPs Only)</string>
 	<string name="denomination_100_vip">$100 (VIPs Only)</string>
 	<string name="choose_a_denomination">Choose a Denomination</string>
@@ -21,8 +23,9 @@ Special thanks for the idea to Eric Overton and Jeremy Davis."</string>
 	<string name="pref_total_spent">totalSpent</string>
 	<string name="prefs_orientation">orientation</string>
 	<string name="prefs_denomination">denomination</string>
+    <string name="prefs_vip_mode">vip_mode</string>
 	<string name="total_spent">Total Rainfall: %s</string>
 	<string name="your_spending_report">Your Spending Report</string>
-	<string name="im_so_cool">"I'm so cool"</string>
+	<string name="im_so_cool">I\'m so cool</string>
 	<string name="reset">Reset</string>
 </resources>

@@ -37,35 +37,57 @@ public class DenominationDialogFragment extends DialogFragment {
 
     private CharSequence mCurrentDenomination;
     private OnDenominationChosenListener mOnDenominationChosenListener;
+    private boolean mVipModeUnavailable;
+    private boolean mVipMode;
 
     public DenominationDialogFragment(CharSequence currentDenomination,
-            OnDenominationChosenListener onDenominationChosenListener) {
+            OnDenominationChosenListener onDenominationChosenListener, boolean vipModeUnavailalble,
+            boolean vipMode) {
         mCurrentDenomination = currentDenomination;
         mOnDenominationChosenListener = onDenominationChosenListener;
+        mVipModeUnavailable = vipModeUnavailalble;
+        mVipMode = vipMode;
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final Activity activity = getActivity();
-        final CharSequence[] items = { activity.getString(R.string.denomination_1),
-                activity.getString(R.string.denomination_5),
-                activity.getString(R.string.denomination_10),
-                activity.getString(R.string.denomination_20),
-                activity.getString(R.string.denomination_50_vip),
-                activity.getString(R.string.denomination_100_vip) };
+
+        final CharSequence[] items;
+
+        if (mVipMode) {
+            items = new CharSequence[] { activity.getString(R.string.denomination_1),
+                    activity.getString(R.string.denomination_5),
+                    activity.getString(R.string.denomination_10),
+                    activity.getString(R.string.denomination_20),
+                    activity.getString(R.string.denomination_50),
+                    activity.getString(R.string.denomination_100) };
+        } else if (mVipModeUnavailable) {
+            items = new CharSequence[] { activity.getString(R.string.denomination_1),
+                    activity.getString(R.string.denomination_5),
+                    activity.getString(R.string.denomination_10),
+                    activity.getString(R.string.denomination_20) };
+        } else {
+            items = new CharSequence[] { activity.getString(R.string.denomination_1),
+                    activity.getString(R.string.denomination_5),
+                    activity.getString(R.string.denomination_10),
+                    activity.getString(R.string.denomination_20),
+                    activity.getString(R.string.denomination_50_vip),
+                    activity.getString(R.string.denomination_100_vip) };
+        }
 
         AlertDialog.Builder denominationBuilder = new AlertDialog.Builder(activity);
         denominationBuilder.setTitle(R.string.choose_a_denomination);
         denominationBuilder.setSingleChoiceItems(items,
                 Arrays.asList(items).indexOf(mCurrentDenomination),
                 new DialogInterface.OnClickListener() {
-            
+
                     public void onClick(DialogInterface dialog, int item) {
                         dialog.dismiss();
                         // TODO: Add VIP check
                         mOnDenominationChosenListener.onDenominationChosen(items[item].toString());
                     }
-                    
+
                 });
         return denominationBuilder.create();
     }
