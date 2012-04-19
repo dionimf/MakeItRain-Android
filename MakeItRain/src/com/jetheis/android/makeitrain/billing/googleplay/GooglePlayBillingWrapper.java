@@ -143,14 +143,16 @@ public class GooglePlayBillingWrapper {
         Bundle response;
 
         try {
-            response = mBoundService.makeGooglePlayRequest("CHECK_BILLING_SUPPORTED");
+            response = mBoundService
+                    .makeGooglePlayRequest(Constants.GOOGLE_PLAY_REQUEST_METHOD_CHECK_BILLING_SUPPORTED);
         } catch (RemoteException e) {
             Log.e(Constants.TAG, "RemoteException: " + e.getLocalizedMessage());
             return false;
         }
 
         if (response == null
-                || response.getInt("RESPONSE_CODE") != GooglePlayResponseCode.RESULT_OK.ordinal()) {
+                || response.getInt(Constants.GOOGLE_PLAY_BUNDLE_KEY_RESPONSE_CODE) != GooglePlayResponseCode.RESULT_OK
+                        .ordinal()) {
             return false;
         }
 
@@ -161,19 +163,22 @@ public class GooglePlayBillingWrapper {
         Bundle response;
 
         try {
-            response = mBoundService.makeGooglePlayPurchaseRequest("vip_status");
+            response = mBoundService
+                    .makeGooglePlayPurchaseRequest(Constants.GOOGLE_PLAY_PRODUCT_ID);
         } catch (RemoteException e) {
             Log.e(Constants.TAG, "RemoteException: " + e.getLocalizedMessage());
             return;
         }
 
-        if (response.getInt("RESPONSE_CODE") != GooglePlayResponseCode.RESULT_OK.ordinal()) {
+        if (response.getInt(Constants.GOOGLE_PLAY_BUNDLE_KEY_RESPONSE_CODE) != GooglePlayResponseCode.RESULT_OK
+                .ordinal()) {
             return;
         }
 
         Log.d(Constants.TAG, "Launching Google Play");
 
-        PendingIntent pendingIntent = response.getParcelable("PURCHASE_INTENT");
+        PendingIntent pendingIntent = response
+                .getParcelable(Constants.GOOGLE_PLAY_BUNDLE_KEY_PURCHASE_INTENT);
 
         try {
             mContext.startIntentSender(pendingIntent.getIntentSender(), new Intent(), 0, 0, 0);
@@ -199,7 +204,7 @@ public class GooglePlayBillingWrapper {
         }
     }
 
-    public void sendNotificationConformation(String[] notificationIds) {  
+    public void sendNotificationConformation(String[] notificationIds) {
         Log.v(Constants.TAG, "Confirming " + notificationIds.length + " notification(s)");
 
         try {
@@ -227,7 +232,7 @@ public class GooglePlayBillingWrapper {
         try {
             responseJson = new JSONObject(response);
 
-            long nonce = responseJson.getLong("nonce");
+            long nonce = responseJson.getLong(Constants.GOOGLE_PLAY_JSON_KEY_NONCE);
 
             if (!GooglePlayBillingSecurity.isNonceKnown(nonce)) {
                 Log.e(Constants.TAG, "Bad Google Play nonce! Possible security breach!");
@@ -236,7 +241,7 @@ public class GooglePlayBillingWrapper {
 
             Log.v(Constants.TAG, "Signature and nonce OK");
 
-            JSONArray orders = responseJson.getJSONArray("orders");
+            JSONArray orders = responseJson.getJSONArray(Constants.GOOGLE_PLAY_JSON_KEY_ORDERS);
 
             if (orders.length() == 0) {
                 Log.v(Constants.TAG, "No orders present in response");
@@ -248,7 +253,7 @@ public class GooglePlayBillingWrapper {
             for (int i = 0; i < orders.length(); i++) {
                 JSONObject order = orders.getJSONObject(i);
 
-                String packageName = order.getString("packageName");
+                String packageName = order.getString(Constants.GOOGLE_PLAY_JSON_KEY_PACKAGE_NAME);
                 if (!packageName.equals(mContext.getPackageName())) {
                     Log.e(Constants.TAG, "Bad Google Play package name! Possible security breach!");
                     return;
@@ -257,34 +262,37 @@ public class GooglePlayBillingWrapper {
                 Log.v(Constants.TAG, "Package name OK");
 
                 try {
-                    notificationIds[i] = order.getString("notificationId");
+                    notificationIds[i] = order
+                            .getString(Constants.GOOGLE_PLAY_JSON_KEY_NOTIFICATION_ID);
                 } catch (NumberFormatException e) {
                     Log.e(Constants.TAG,
                             "Found non-numerical notification ID: "
-                                    + order.getString("notificationId") + ". Ignoring.");
+                                    + order.getString(Constants.GOOGLE_PLAY_JSON_KEY_NOTIFICATION_ID)
+                                    + ". Ignoring.");
                 }
 
-                String productId = order.getString("productId");
+                String productId = order.getString(Constants.GOOGLE_PLAY_JSON_KEY_PRODUCT_ID);
 
-                Date purchaseDate = new Date(order.getLong("purchaseTime"));
+                Date purchaseDate = new Date(
+                        order.getLong(Constants.GOOGLE_PLAY_JSON_KEY_PURCHASE_TIME));
                 GooglePlayPurchaseState purchaseState = GooglePlayPurchaseState.fromInt(order
-                        .getInt("purchaseState"));
+                        .getInt(Constants.GOOGLE_PLAY_JSON_KEY_PURCHASE_STATE));
 
                 if (purchaseState == GooglePlayPurchaseState.PURCHASED) {
 
                     Log.i(Constants.TAG, "Found record of purchase of " + productId + " from "
                             + DateFormat.getLongDateFormat(mContext).format(purchaseDate));
 
-                    if (productId.equals("vip_status")) {
+                    if (productId.equals(Constants.GOOGLE_PLAY_PRODUCT_ID)) {
                         mOnPurchaseListnener.onGooglePlayVipModePurchaseFound();
                     } else {
                         Log.e(Constants.TAG, "Product id " + productId + " not recognized");
                     }
 
                 } else if (purchaseState == GooglePlayPurchaseState.CANCELLED) {
-
+                    Log.i(Constants.TAG, "User cancelled purchase");
                 } else {
-                    Log.e(Constants.TAG, "Google Play refund attampted: unsupported");
+                    Log.e(Constants.TAG, "Google Play refund attempted: unsupported");
                 }
             }
 

@@ -32,17 +32,17 @@ import com.jetheis.android.makeitrain.billing.googleplay.GooglePlayBillingWrappe
 
 public class GooglePlayBillingReceiver extends BroadcastReceiver {
 
-
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
-        
+
         Log.v(Constants.TAG, "Received Google Play intent: " + action);
 
         // RESPONSE_CODE
-        if (action.equals("com.android.vending.billing.RESPONSE_CODE")) {
-            int responseCode = intent.getIntExtra("response_code", -1);
-            long requestId = intent.getLongExtra("request_id", -1);
+        if (action.equals(Constants.GOOGLE_PLAY_INTENT_ACTION_RESPONSE_CODE)) {
+            int responseCode = intent.getIntExtra(Constants.GOOGLE_PLAY_INTENT_KEY_RESPONSE_CODE,
+                    -1);
+            long requestId = intent.getLongExtra(Constants.GOOGLE_PLAY_INTENT_KEY_REQUEST_ID, -1);
 
             if (responseCode == GooglePlayResponseCode.RESULT_OK.ordinal()) {
                 Log.v(Constants.TAG, "Google Play RESPONSE_CODE (request " + requestId + "): "
@@ -52,23 +52,25 @@ public class GooglePlayBillingReceiver extends BroadcastReceiver {
                         + GooglePlayResponseCode.fromInt(responseCode));
                 return;
             }
-            
-        // IN_APP_NOTIFY
-        } else if (action.equals("com.android.vending.billing.IN_APP_NOTIFY")) {
-            String notifyId = intent.getStringExtra("notification_id");
 
-            Log.v(Constants.TAG, "Requesting purchase state for IN_APP_NOTIFY notification: " + notifyId);
+            // IN_APP_NOTIFY
+        } else if (action.equals(Constants.GOOGLE_PLAY_INTENT_ACTION_IN_APP_NOTIFY)) {
+            String notifyId = intent
+                    .getStringExtra(Constants.GOOGLE_PLAY_INTENT_KEY_NOTIFICATION_ID);
+
+            Log.v(Constants.TAG, "Requesting purchase state for IN_APP_NOTIFY notification: "
+                    + notifyId);
 
             GooglePlayBillingWrapper.getInstance().requestPurchaseInfo(new String[] { notifyId });
-         
-        // PURCHASE_STATE_CHANGED
-        } else if (action.equals("com.android.vending.billing.PURCHASE_STATE_CHANGED")) {
-            String signedData = intent.getStringExtra("inapp_signed_data");
-            String signature = intent.getStringExtra("inapp_signature");
+
+            // PURCHASE_STATE_CHANGED
+        } else if (action.equals(Constants.GOOGLE_PLAY_INTENT_ACTION_PURCHASE_STATE_CHANGED)) {
+            String signedData = intent.getStringExtra(Constants.GOOGLE_PLAY_INTENT_KEY_SIGNED_DATA);
+            String signature = intent.getStringExtra(Constants.GOOGLE_PLAY_INTENT_KEY_SIGNATURE);
 
             GooglePlayBillingWrapper.getInstance().handleJsonResponse(signedData, signature);
-           
-        // Unknown
+
+            // Unknown
         } else {
             Log.e(Constants.TAG, "Unexpected response from Google Play: " + action);
         }

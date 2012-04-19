@@ -27,7 +27,7 @@ public class Constants {
     public static final String TAG = "MakeItRain";
 
     // Google Play product id
-    public static final String GOOGLE_PLAY_PRODUCT_ID = "vip_status";
+    public static final String GOOGLE_PLAY_PRODUCT_ID = "android.test.purchased";
 
     // Google Play API version
     public static final int GOOGLE_PLAY_API_VERSION = 1;
@@ -42,6 +42,7 @@ public class Constants {
     public static final String GOOGLE_PLAY_BUNDLE_KEY_NOTIFY_IDS = "NOTIFY_IDS";
     public static final String GOOGLE_PLAY_BUNDLE_KEY_ITEM_ID = "ITEM_ID";
     public static final String GOOGLE_PLAY_BUNDLE_KEY_NONCE = "NONCE";
+    public static final String GOOGLE_PLAY_BUNDLE_KEY_PURCHASE_INTENT = "PURCHASE_INTENT";
 
     // Google Play billing request methods
     public static final String GOOGLE_PLAY_REQUEST_METHOD_CHECK_BILLING_SUPPORTED = "CHECK_BILLING_SUPPORTED";
@@ -50,8 +51,24 @@ public class Constants {
     public static final String GOOGLE_PLAY_REQUEST_METHOD_RESTORE_TRANSACTIONS = "RESTORE_TRANSACTIONS";
     public static final String GOOGLE_PLAY_REQUEST_METHOD_CONFIRM_NOTIFICATIONS = "CONFIRM_NOTIFICATIONS";
 
+    // Google Play intent actions
+    public static final String GOOGLE_PLAY_INTENT_ACTION_RESPONSE_CODE = "com.android.vending.billing.RESPONSE_CODE";
+    public static final String GOOGLE_PLAY_INTENT_ACTION_IN_APP_NOTIFY = "com.android.vending.billing.IN_APP_NOTIFY";
+    public static final String GOOGLE_PLAY_INTENT_ACTION_PURCHASE_STATE_CHANGED = "com.android.vending.billing.PURCHASE_STATE_CHANGED";
+
     // Google Play intent keys
+    public static final String GOOGLE_PLAY_INTENT_KEY_RESPONSE_CODE = "response_code";
+    public static final String GOOGLE_PLAY_INTENT_KEY_REQUEST_ID = "request_id";
+    public static final String GOOGLE_PLAY_INTENT_KEY_NOTIFICATION_ID = "notification_id";
+    public static final String GOOGLE_PLAY_INTENT_KEY_SIGNED_DATA = "inapp_signed_data";
+    public static final String GOOGLE_PLAY_INTENT_KEY_SIGNATURE = "inapp_signature";
 
     // Google Play JSON keys
-
+    public static final String GOOGLE_PLAY_JSON_KEY_NONCE = "nonce";
+    public static final String GOOGLE_PLAY_JSON_KEY_ORDERS = "orders";
+    public static final String GOOGLE_PLAY_JSON_KEY_PACKAGE_NAME = "packageName";
+    public static final String GOOGLE_PLAY_JSON_KEY_NOTIFICATION_ID = "notificationId";
+    public static final String GOOGLE_PLAY_JSON_KEY_PRODUCT_ID = "productId";
+    public static final String GOOGLE_PLAY_JSON_KEY_PURCHASE_TIME = "purchaseTime";
+    public static final String GOOGLE_PLAY_JSON_KEY_PURCHASE_STATE = "purchaseState";
 }
