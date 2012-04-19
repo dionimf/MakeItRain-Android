@@ -57,8 +57,7 @@ public class GooglePlayBillingService extends Service implements ServiceConnecti
         super.onCreate();
 
         try {
-            boolean bindResult = bindService(new Intent(
-                    "com.android.vending.billing.MarketBillingService.BIND"), this,
+            boolean bindResult = bindService(new Intent(Constants.GOOGLE_PLAY_BIND_INTENT), this,
                     BIND_AUTO_CREATE);
             if (!bindResult) {
                 Log.e(Constants.TAG, "Could not bind to the Google Play service");
@@ -81,9 +80,10 @@ public class GooglePlayBillingService extends Service implements ServiceConnecti
 
     protected Bundle makeGooglePlayRequestBundle(String method) {
         Bundle request = new Bundle();
-        request.putString("BILLING_REQUEST", method);
-        request.putInt("API_VERSION", 1);
-        request.putString("PACKAGE_NAME", getPackageName());
+        request.putString(Constants.GOOGLE_PLAY_BUNDLE_KEY_BILLING_REQUEST, method);
+        request.putInt(Constants.GOOGLE_PLAY_BUNDLE_KEY_API_VERSION,
+                Constants.GOOGLE_PLAY_API_VERSION);
+        request.putString(Constants.GOOGLE_PLAY_BUNDLE_KEY_PACKAGE_NAME, getPackageName());
 
         return request;
     }
@@ -101,48 +101,53 @@ public class GooglePlayBillingService extends Service implements ServiceConnecti
 
         Bundle result = mService.sendBillingRequest(request);
 
-        String method = request.getString("BILLING_REQUEST");
-        int responseCode = result.getInt("RESPONSE_CODE");
+        String method = request.getString(Constants.GOOGLE_PLAY_BUNDLE_KEY_BILLING_REQUEST);
+        int responseCode = result.getInt(Constants.GOOGLE_PLAY_BUNDLE_KEY_RESPONSE_CODE);
 
         if (responseCode == GooglePlayResponseCode.RESULT_OK.ordinal()) {
             Log.v(Constants.TAG,
-                    "Sent Google Play " + method + " request (" + result.getLong("REQUEST_ID")
-                            + "): " + GooglePlayResponseCode.fromInt(responseCode));
+                    "Sent Google Play " + method + " request ("
+                            + result.getLong(Constants.GOOGLE_PLAY_BUNDLE_KEY_REQUEST_ID) + "): "
+                            + GooglePlayResponseCode.fromInt(responseCode));
         } else {
             Log.e(Constants.TAG,
-                    "Sent Google Play " + method + " request (" + result.getLong("REQUEST_ID")
-                            + "): " + GooglePlayResponseCode.fromInt(responseCode));
+                    "Sent Google Play " + method + " request ("
+                            + result.getLong(Constants.GOOGLE_PLAY_BUNDLE_KEY_REQUEST_ID) + "): "
+                            + GooglePlayResponseCode.fromInt(responseCode));
         }
 
         return result;
     }
 
     public Bundle makeGooglePlayPurchaseRequest(String productId) throws RemoteException {
-        Bundle request = makeGooglePlayRequestBundle("REQUEST_PURCHASE");
-        request.putString("ITEM_ID", productId);
+        Bundle request = makeGooglePlayRequestBundle(Constants.GOOGLE_PLAY_REQUEST_METHOD_REQUEST_PURCHASE);
+        request.putString(Constants.GOOGLE_PLAY_BUNDLE_KEY_ITEM_ID, productId);
         return sendBillingRequest(request);
     }
 
     public Bundle makeGooglePlayPurchaseInformationRequest(String[] notifyIds)
             throws RemoteException {
-        Bundle request = makeGooglePlayRequestBundle("GET_PURCHASE_INFORMATION");
-        request.putStringArray("NOTIFY_IDS", notifyIds);
-        request.putLong("NONCE", GooglePlayBillingSecurity.generateNonce());
+        Bundle request = makeGooglePlayRequestBundle(Constants.GOOGLE_PLAY_REQUEST_METHOD_GET_PURCHASE_INFORMATION);
+        request.putStringArray(Constants.GOOGLE_PLAY_BUNDLE_KEY_NOTIFY_IDS, notifyIds);
+        request.putLong(Constants.GOOGLE_PLAY_BUNDLE_KEY_NONCE,
+                GooglePlayBillingSecurity.generateNonce());
 
         return sendBillingRequest(request);
     }
 
     public Bundle makeGooglePlayRestoreTransactionsRequest() throws RemoteException {
-        Bundle request = makeGooglePlayRequestBundle("RESTORE_TRANSACTIONS");
-        request.putLong("NONCE", GooglePlayBillingSecurity.generateNonce());
+        Bundle request = makeGooglePlayRequestBundle(Constants.GOOGLE_PLAY_REQUEST_METHOD_RESTORE_TRANSACTIONS);
+        request.putLong(Constants.GOOGLE_PLAY_BUNDLE_KEY_NONCE,
+                GooglePlayBillingSecurity.generateNonce());
 
         return sendBillingRequest(request);
     }
-    
-    public Bundle makeGooglePlayConfirmNotificationsRequest(String[] notificationIds) throws RemoteException {
-        Bundle request = makeGooglePlayRequestBundle("CONFIRM_NOTIFICATIONS");
-        request.putStringArray("NOTIFY_IDS", notificationIds);
-        
+
+    public Bundle makeGooglePlayConfirmNotificationsRequest(String[] notificationIds)
+            throws RemoteException {
+        Bundle request = makeGooglePlayRequestBundle(Constants.GOOGLE_PLAY_REQUEST_METHOD_CONFIRM_NOTIFICATIONS);
+        request.putStringArray(Constants.GOOGLE_PLAY_BUNDLE_KEY_NOTIFY_IDS, notificationIds);
+
         return sendBillingRequest(request);
     }
 

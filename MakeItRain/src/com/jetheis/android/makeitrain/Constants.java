@@ -26,4 +26,32 @@ public class Constants {
 
     public static final String TAG = "MakeItRain";
 
+    // Google Play product id
+    public static final String GOOGLE_PLAY_PRODUCT_ID = "vip_status";
+
+    // Google Play API version
+    public static final int GOOGLE_PLAY_API_VERSION = 1;
+    public static final String GOOGLE_PLAY_BIND_INTENT = "com.android.vending.billing.MarketBillingService.BIND";
+
+    // Google Play bundle keys
+    public static final String GOOGLE_PLAY_BUNDLE_KEY_BILLING_REQUEST = "BILLING_REQUEST";
+    public static final String GOOGLE_PLAY_BUNDLE_KEY_API_VERSION = "API_VERSION";
+    public static final String GOOGLE_PLAY_BUNDLE_KEY_PACKAGE_NAME = "PACKAGE_NAME";
+    public static final String GOOGLE_PLAY_BUNDLE_KEY_RESPONSE_CODE = "RESPONSE_CODE";
+    public static final String GOOGLE_PLAY_BUNDLE_KEY_REQUEST_ID = "REQUEST_ID";
+    public static final String GOOGLE_PLAY_BUNDLE_KEY_NOTIFY_IDS = "NOTIFY_IDS";
+    public static final String GOOGLE_PLAY_BUNDLE_KEY_ITEM_ID = "ITEM_ID";
+    public static final String GOOGLE_PLAY_BUNDLE_KEY_NONCE = "NONCE";
+
+    // Google Play billing request methods
+    public static final String GOOGLE_PLAY_REQUEST_METHOD_CHECK_BILLING_SUPPORTED = "CHECK_BILLING_SUPPORTED";
+    public static final String GOOGLE_PLAY_REQUEST_METHOD_REQUEST_PURCHASE = "REQUEST_PURCHASE";
+    public static final String GOOGLE_PLAY_REQUEST_METHOD_GET_PURCHASE_INFORMATION = "GET_PURCHASE_INFORMATION";
+    public static final String GOOGLE_PLAY_REQUEST_METHOD_RESTORE_TRANSACTIONS = "RESTORE_TRANSACTIONS";
+    public static final String GOOGLE_PLAY_REQUEST_METHOD_CONFIRM_NOTIFICATIONS = "CONFIRM_NOTIFICATIONS";
+
+    // Google Play intent keys
+
+    // Google Play JSON keys
+
 }
