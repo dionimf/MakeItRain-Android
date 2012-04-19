@@ -87,7 +87,6 @@ public class MakeItRainActivity extends FragmentActivity {
 
                         @Override
                         public void onGooglePlayBillingReady() {
-                            Log.d(Constants.TAG, "Looking for transactions to restore");
                             mBilling.restoreTransactions();
                         }
 
@@ -95,8 +94,10 @@ public class MakeItRainActivity extends FragmentActivity {
                         public void onGooglePlayBillingNotSupported() {
                             disableVipMode();
                             Toast.makeText(MakeItRainActivity.this,
-                                    "In-app billing not supported. VIP mode unavailable.",
+                                    "In-app billing not supported.\nVIP mode unavailable.",
                                     Toast.LENGTH_SHORT).show();
+                            Log.e(Constants.TAG,
+                                    "Google Play billing not supported. VIP mode will be unavailable.");
                         }
 
                     }, new OnGooglePlayVipModePurchaseFoundListener() {
