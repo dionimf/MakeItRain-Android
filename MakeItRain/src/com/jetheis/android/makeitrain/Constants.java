@@ -25,9 +25,15 @@ package com.jetheis.android.makeitrain;
 public class Constants {
 
     public static final String TAG = "MakeItRain";
+    
+    public enum LicenseType {
+        FREE, GOOGLE_PLAY, AMAZON_APPSTORE
+    }
+    
+    public static final LicenseType LICENSE_TYPE = LicenseType.GOOGLE_PLAY;
 
     // Google Play product id
-    public static final String GOOGLE_PLAY_PRODUCT_ID = "android.test.purchased";
+    public static final String GOOGLE_PLAY_PRODUCT_ID = "vip_status";
 
     // Google Play API version
     public static final int GOOGLE_PLAY_API_VERSION = 1;

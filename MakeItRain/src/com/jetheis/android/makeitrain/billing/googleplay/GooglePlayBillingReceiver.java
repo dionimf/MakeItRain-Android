@@ -26,6 +26,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.jetheis.android.makeitrain.Constants;
 import com.jetheis.android.makeitrain.billing.googleplay.GooglePlayBillingWrapper.GooglePlayResponseCode;
@@ -50,6 +51,11 @@ public class GooglePlayBillingReceiver extends BroadcastReceiver {
             } else {
                 Log.e(Constants.TAG, "Google Play RESPONSE_CODE (request " + requestId + "): "
                         + GooglePlayResponseCode.fromInt(responseCode));
+                
+                if (responseCode == GooglePlayResponseCode.RESULT_SERVICE_UNAVAILABLE.ordinal()) {
+                    Toast.makeText(context, "Google Play failed to provide transaction data. This may cause a VIP status order not to be loaded.", Toast.LENGTH_LONG).show();
+                }
+                
                 return;
             }
 

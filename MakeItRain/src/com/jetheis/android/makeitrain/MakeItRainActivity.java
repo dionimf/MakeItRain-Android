@@ -37,6 +37,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.jetheis.android.makeitrain.Constants.LicenseType;
 import com.jetheis.android.makeitrain.billing.googleplay.GooglePlayBillingWrapper;
 import com.jetheis.android.makeitrain.billing.googleplay.GooglePlayBillingWrapper.OnGooglePlayBillingReadyListener;
 import com.jetheis.android.makeitrain.billing.googleplay.GooglePlayBillingWrapper.OnGooglePlayVipModePurchaseFoundListener;
@@ -82,35 +83,40 @@ public class MakeItRainActivity extends FragmentActivity {
 
         if (!mVipMode) {
 
-            mBilling = GooglePlayBillingWrapper.initializeInstance(this,
-                    new OnGooglePlayBillingReadyListener() {
+            if (Constants.LICENSE_TYPE == LicenseType.FREE) {
+                activateVipMode();
+            } else if (Constants.LICENSE_TYPE == LicenseType.GOOGLE_PLAY) {
 
-                        @Override
-                        public void onGooglePlayBillingReady() {
-                            mBilling.restoreTransactions();
-                        }
+                mBilling = GooglePlayBillingWrapper.initializeInstance(this,
+                        new OnGooglePlayBillingReadyListener() {
 
-                        @Override
-                        public void onGooglePlayBillingNotSupported() {
-                            disableVipMode();
-                            Toast.makeText(MakeItRainActivity.this,
-                                    "In-app billing not supported.\nVIP mode unavailable.",
-                                    Toast.LENGTH_SHORT).show();
-                            Log.e(Constants.TAG,
-                                    "Google Play billing not supported. VIP mode will be unavailable.");
-                        }
+                            @Override
+                            public void onGooglePlayBillingReady() {
+                                mBilling.restoreTransactions();
+                            }
 
-                    }, new OnGooglePlayVipModePurchaseFoundListener() {
+                            @Override
+                            public void onGooglePlayBillingNotSupported() {
+                                disableVipMode();
+                                Toast.makeText(MakeItRainActivity.this,
+                                        "In-app billing not supported.\nVIP mode unavailable.",
+                                        Toast.LENGTH_SHORT).show();
+                                Log.e(Constants.TAG,
+                                        "Google Play billing not supported. VIP mode will be unavailable.");
+                            }
 
-                        @Override
-                        public void onGooglePlayVipModePurchaseFound() {
-                            activateVipMode();
-                            Toast.makeText(MakeItRainActivity.this, "VIP Status Activated!",
-                                    Toast.LENGTH_SHORT).show();
-                            Log.i(Constants.TAG, "VIP mode activated");
-                        }
+                        }, new OnGooglePlayVipModePurchaseFoundListener() {
 
-                    });
+                            @Override
+                            public void onGooglePlayVipModePurchaseFound() {
+                                activateVipMode();
+                            }
+
+                        });
+            } else if (Constants.LICENSE_TYPE == LicenseType.AMAZON_APPSTORE) {
+                // TODO: Support this
+            }
+
         }
 
         mLeftMap = new HashMap<String, Integer>();
@@ -242,6 +248,9 @@ public class MakeItRainActivity extends FragmentActivity {
     }
 
     private void activateVipMode() {
+        Toast.makeText(MakeItRainActivity.this, "VIP Status Activated!", Toast.LENGTH_SHORT).show();
+        Log.i(Constants.TAG, "VIP mode activated");
+
         mVipMode = true;
 
         Editor editor = mPrefs.edit();

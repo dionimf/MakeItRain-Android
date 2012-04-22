@@ -23,6 +23,8 @@
 package com.jetheis.android.makeitrain.billing.googleplay;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,6 +43,7 @@ import android.text.format.DateFormat;
 import android.util.Log;
 
 import com.jetheis.android.makeitrain.Constants;
+import com.jetheis.android.makeitrain.billing.googleplay.GooglePlayBillingService.OnGooglePlayBillingSupportResultListener;
 
 public class GooglePlayBillingWrapper {
 
@@ -119,13 +122,23 @@ public class GooglePlayBillingWrapper {
             public void onServiceConnected(ComponentName name, IBinder service) {
                 mBoundService = ((GooglePlayBillingService.GooglePlayBillingBinder) service)
                         .getService();
-                if (isBillingSupported()) {
-                    Log.i(Constants.TAG, "Google Play billing ready");
-                    mOnReadyListener.onGooglePlayBillingReady();
-                } else {
-                    Log.i(Constants.TAG, "Google Play billing is not supported");
-                    mOnReadyListener.onGooglePlayBillingNotSupported();
-                }
+                mBoundService
+                        .checkIsBillingSupported(new OnGooglePlayBillingSupportResultListener() {
+
+                            @Override
+                            public void onGooglePlayBillingSupportResultFound(
+                                    boolean billingSupported) {
+                                if (billingSupported) {
+                                    Log.i(Constants.TAG, "Google Play billing ready");
+                                    mOnReadyListener.onGooglePlayBillingReady();
+                                } else {
+                                    Log.i(Constants.TAG, "Google Play billing is not supported");
+                                    mOnReadyListener.onGooglePlayBillingNotSupported();
+                                }
+                            }
+
+                        });
+
             }
 
             @Override
@@ -137,26 +150,6 @@ public class GooglePlayBillingWrapper {
 
         mContext.bindService(new Intent(context, GooglePlayBillingService.class), mConnection,
                 Context.BIND_AUTO_CREATE);
-    }
-
-    public boolean isBillingSupported() {
-        Bundle response;
-
-        try {
-            response = mBoundService
-                    .makeGooglePlayRequest(Constants.GOOGLE_PLAY_REQUEST_METHOD_CHECK_BILLING_SUPPORTED);
-        } catch (RemoteException e) {
-            Log.e(Constants.TAG, "RemoteException: " + e.getLocalizedMessage());
-            return false;
-        }
-
-        if (response == null
-                || response.getInt(Constants.GOOGLE_PLAY_BUNDLE_KEY_RESPONSE_CODE) != GooglePlayResponseCode.RESULT_OK
-                        .ordinal()) {
-            return false;
-        }
-
-        return true;
     }
 
     public void requestVipStatus() {
@@ -174,8 +167,6 @@ public class GooglePlayBillingWrapper {
                 .ordinal()) {
             return;
         }
-
-        Log.d(Constants.TAG, "Launching Google Play");
 
         PendingIntent pendingIntent = response
                 .getParcelable(Constants.GOOGLE_PLAY_BUNDLE_KEY_PURCHASE_INTENT);
@@ -222,6 +213,8 @@ public class GooglePlayBillingWrapper {
     }
 
     public void handleJsonResponse(String response, String signature) {
+        Log.v(Constants.TAG, "Handling JSON response: " + response);
+
         if (!GooglePlayBillingSecurity.isCorrectSignature(response, signature)) {
             Log.e(Constants.TAG, "Bad Google Play signature! Possible security breach!");
             return;
@@ -248,7 +241,7 @@ public class GooglePlayBillingWrapper {
                 return;
             }
 
-            String[] notificationIds = new String[orders.length()];
+            List<String> notificationIds = new ArrayList<String>(orders.length());
 
             for (int i = 0; i < orders.length(); i++) {
                 JSONObject order = orders.getJSONObject(i);
@@ -261,14 +254,10 @@ public class GooglePlayBillingWrapper {
 
                 Log.v(Constants.TAG, "Package name OK");
 
-                try {
-                    notificationIds[i] = order
-                            .getString(Constants.GOOGLE_PLAY_JSON_KEY_NOTIFICATION_ID);
-                } catch (NumberFormatException e) {
-                    Log.e(Constants.TAG,
-                            "Found non-numerical notification ID: "
-                                    + order.getString(Constants.GOOGLE_PLAY_JSON_KEY_NOTIFICATION_ID)
-                                    + ". Ignoring.");
+                if (order.has(Constants.GOOGLE_PLAY_JSON_KEY_NOTIFICATION_ID)) {
+                    notificationIds.add(order
+                            .getString(Constants.GOOGLE_PLAY_JSON_KEY_NOTIFICATION_ID));
+
                 }
 
                 String productId = order.getString(Constants.GOOGLE_PLAY_JSON_KEY_PRODUCT_ID);
@@ -296,7 +285,10 @@ public class GooglePlayBillingWrapper {
                 }
             }
 
-            sendNotificationConformation(notificationIds);
+            if (notificationIds.size() > 0) {
+                sendNotificationConformation(notificationIds.toArray(new String[notificationIds
+                        .size()]));
+            }
 
         } catch (JSONException e) {
             Log.e(Constants.TAG, "JSONException: " + e.getLocalizedMessage());

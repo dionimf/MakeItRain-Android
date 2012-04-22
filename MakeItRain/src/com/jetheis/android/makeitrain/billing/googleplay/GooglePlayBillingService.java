@@ -40,6 +40,8 @@ public class GooglePlayBillingService extends Service implements ServiceConnecti
 
     private IMarketBillingService mService;
     private final IBinder mBinder = new GooglePlayBillingBinder();
+    private boolean mWillConnect;
+    private OnGooglePlayBillingSupportResultListener mOnSupportListener;
 
     public class GooglePlayBillingBinder extends Binder {
         GooglePlayBillingService getService() {
@@ -57,9 +59,9 @@ public class GooglePlayBillingService extends Service implements ServiceConnecti
         super.onCreate();
 
         try {
-            boolean bindResult = bindService(new Intent(Constants.GOOGLE_PLAY_BIND_INTENT), this,
+            mWillConnect = bindService(new Intent(Constants.GOOGLE_PLAY_BIND_INTENT), this,
                     BIND_AUTO_CREATE);
-            if (!bindResult) {
+            if (!mWillConnect) {
                 Log.e(Constants.TAG, "Could not bind to the Google Play service");
             }
         } catch (SecurityException e) {
@@ -71,6 +73,11 @@ public class GooglePlayBillingService extends Service implements ServiceConnecti
     public void onServiceConnected(ComponentName name, IBinder service) {
         Log.i(Constants.TAG, "Google Play service connected");
         mService = IMarketBillingService.Stub.asInterface(service);
+        
+        if (mOnSupportListener != null) {
+            Log.v(Constants.TAG, "Notifying listener of Google Play connection");
+            mOnSupportListener.onGooglePlayBillingSupportResultFound(isBillingSupported());
+        }
     }
 
     @Override
@@ -119,6 +126,29 @@ public class GooglePlayBillingService extends Service implements ServiceConnecti
         return result;
     }
 
+    public void checkIsBillingSupported(OnGooglePlayBillingSupportResultListener onSupportListener) {
+        if (mService == null && mWillConnect) {
+            Log.v(Constants.TAG, "Google Play service not ready. Registering listener");
+            mOnSupportListener = onSupportListener;
+        } else if (mService == null) {
+            Log.v(Constants.TAG, "No Google Play connection found. Notifying of no support");
+            onSupportListener.onGooglePlayBillingSupportResultFound(false);
+        } else {
+            Log.v(Constants.TAG, "Google Play already connected. Checking support");
+            onSupportListener.onGooglePlayBillingSupportResultFound(isBillingSupported());
+        }
+    }
+
+    private boolean isBillingSupported() {
+        try {
+            Bundle response = makeGooglePlayRequest(Constants.GOOGLE_PLAY_REQUEST_METHOD_CHECK_BILLING_SUPPORTED);
+            return response.getInt(Constants.GOOGLE_PLAY_BUNDLE_KEY_RESPONSE_CODE) == GooglePlayResponseCode.RESULT_OK.ordinal();
+        } catch (RemoteException e) {
+            Log.e(Constants.TAG, "RemoteException: " + e.getLocalizedMessage());
+            return false;
+        }
+    }
+
     public Bundle makeGooglePlayPurchaseRequest(String productId) throws RemoteException {
         Bundle request = makeGooglePlayRequestBundle(Constants.GOOGLE_PLAY_REQUEST_METHOD_REQUEST_PURCHASE);
         request.putString(Constants.GOOGLE_PLAY_BUNDLE_KEY_ITEM_ID, productId);
@@ -149,6 +179,10 @@ public class GooglePlayBillingService extends Service implements ServiceConnecti
         request.putStringArray(Constants.GOOGLE_PLAY_BUNDLE_KEY_NOTIFY_IDS, notificationIds);
 
         return sendBillingRequest(request);
+    }
+
+    public interface OnGooglePlayBillingSupportResultListener {
+        public void onGooglePlayBillingSupportResultFound(boolean billingSupported);
     }
 
 }
