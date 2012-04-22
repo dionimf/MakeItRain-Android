@@ -30,7 +30,7 @@ public class Constants {
         FREE, GOOGLE_PLAY, AMAZON_APPSTORE
     }
     
-    public static final LicenseType LICENSE_TYPE = LicenseType.GOOGLE_PLAY;
+    public static final LicenseType LICENSE_TYPE = LicenseType.FREE;
 
     // Google Play product id
     public static final String GOOGLE_PLAY_PRODUCT_ID = "vip_status";
