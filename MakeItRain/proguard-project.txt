@@ -83,6 +83,7 @@
 
 ## ADDED
 # Compile out verbose logging
-#-assumenosideeffects class android.util.Log {
-#    public static int v(...);
-#}
+-assumenosideeffects class android.util.Log {
+    public static int v(...);
+    public static int d(...);
+}
