@@ -36,6 +36,10 @@ public class GooglePlayBillingReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
+        
+        if (!GooglePlayBillingWrapper.isInitialized()) {
+            GooglePlayBillingWrapper.initializeInstance(context, null, null);
+        }
 
         Log.v(Constants.TAG, "Received Google Play intent: " + action);
 

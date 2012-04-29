@@ -98,6 +98,10 @@ public class GooglePlayBillingWrapper {
 
         return sInstance;
     }
+    
+    public static boolean isInitialized() {
+        return sInstance == null;
+    }
 
     public static void destroyInstance() {
         if (sInstance != null) {
@@ -130,10 +134,14 @@ public class GooglePlayBillingWrapper {
                                     boolean billingSupported) {
                                 if (billingSupported) {
                                     Log.i(Constants.TAG, "Google Play billing ready");
-                                    mOnReadyListener.onGooglePlayBillingReady();
+                                    if (mOnReadyListener != null) {
+                                        mOnReadyListener.onGooglePlayBillingReady();
+                                    }
                                 } else {
                                     Log.i(Constants.TAG, "Google Play billing is not supported");
-                                    mOnReadyListener.onGooglePlayBillingNotSupported();
+                                    if (mOnReadyListener != null) {
+                                        mOnReadyListener.onGooglePlayBillingNotSupported();
+                                    }
                                 }
                             }
 
@@ -273,7 +281,9 @@ public class GooglePlayBillingWrapper {
                             + DateFormat.getLongDateFormat(mContext).format(purchaseDate));
 
                     if (productId.equals(Constants.GOOGLE_PLAY_PRODUCT_ID)) {
-                        mOnPurchaseListnener.onGooglePlayVipModePurchaseFound();
+                        if (mOnPurchaseListnener != null) {
+                            mOnPurchaseListnener.onGooglePlayVipModePurchaseFound();
+                        }
                     } else {
                         Log.e(Constants.TAG, "Product id " + productId + " not recognized");
                     }

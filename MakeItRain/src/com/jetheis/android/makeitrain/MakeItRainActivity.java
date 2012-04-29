@@ -87,6 +87,10 @@ public class MakeItRainActivity extends FragmentActivity {
                 activateVipMode();
             } else if (Constants.LICENSE_TYPE == LicenseType.GOOGLE_PLAY) {
 
+                if (GooglePlayBillingWrapper.isInitialized()) {
+                    GooglePlayBillingWrapper.destroyInstance();
+                }
+                
                 mBilling = GooglePlayBillingWrapper.initializeInstance(this,
                         new OnGooglePlayBillingReadyListener() {
 
